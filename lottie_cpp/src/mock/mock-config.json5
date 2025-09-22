@@ -1,0 +1,5 @@
+{
+  "liblottie_cpp.so": {
+    "source": "src/mock/Liblottie_cpp.mock.ets"
+  }
+}
