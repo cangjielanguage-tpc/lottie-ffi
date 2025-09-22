@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "lottie",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}
