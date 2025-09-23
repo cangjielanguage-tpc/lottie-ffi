@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "Lottie_cppAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "Lottie_cppAbility_label",
+      "value": "label"
+    }
+  ]
+}

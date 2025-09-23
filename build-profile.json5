@@ -41,6 +41,18 @@
     {
       "name": "lottie",
       "srcPath": "./lottie"
+    },
+    {
+      "name": "lottie_cpp",
+      "srcPath": "./lottie_cpp",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,26 @@
+{
+  "module": {
+    "name": "lottie_cpp",
+    "type": "feature",
+    "description": "$string:module_desc",
+    "mainElement": "Lottie_cppAbility",
+    "deviceTypes": [
+      "phone"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "Lottie_cppAbility",
+        "srcEntry": "./ets/lottie_cppability/Lottie_cppAbility.ets",
+        "description": "$string:Lottie_cppAbility_desc",
+        "icon": "$media:layered_image",
+        "label": "$string:Lottie_cppAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true
+      }
+    ]
+  }
+}

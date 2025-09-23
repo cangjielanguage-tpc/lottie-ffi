@@ -1,0 +1,11 @@
+{
+  "name": "lottie_cpp",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "liblottie_cpp.so": "file:./src/main/cpp/types/liblottie_cpp"
+  }
+}
