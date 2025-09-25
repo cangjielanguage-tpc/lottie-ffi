@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "lottie-turbo",
+        "License": "Apache License",
+        "License File": "LICENSE",
+        "Version Number": "v2.0",
+        "Owner": "OpenHarmony-SIG"
+        "Upstream URL": "https://gitcode.com/openharmony-sig/lottie_turbo",
+        "Description": "Cangjie version of lottie4cj library"
+    }
+]
