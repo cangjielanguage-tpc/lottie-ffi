@@ -15,6 +15,8 @@
 
 #include "cangjie/lottie_data_config.h"
 
+#include "controller/lottie_handler.h"
+
 namespace LottieTurbo {
 
 class LottieConfigBridge : public LottieConfig {
@@ -28,7 +30,9 @@ public:
     //bool GetResourceManager(napi_value &jsObject);
     //template <typename T> T *GetObject(napi_value &jsObject);
     std::unique_ptr<LottieListener> &GetLottieListener();
-    //napi_threadsafe_function GetSafeFunction();
+
+    std::function<void(void *)> GetSafeFunction();
+    void SetSafeFunction(std::function<void(void *)> safeFunc);
 
 private:
     //NapiHelper napiHelper_;
@@ -42,7 +46,8 @@ private:
     //bool ConvertToType(napi_value &napiValue, Resource &resource);
     //bool ConvertToType(napi_value &napiValue, ImageAssetDelegateType &imgAssets);
     std::unique_ptr<LottieListener> listener_{nullptr};
-    //napi_threadsafe_function safeFunc_{nullptr};
+
+    std::function<void(void *)> safeFunc_{nullptr};
 };
 
 //template <typename T>

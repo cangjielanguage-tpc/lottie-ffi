@@ -3,13 +3,18 @@
   compile-option = "--dy-std --cfg=\"${COMPILE_CONDITION}\""
   description = "CangjieUI Application"
   link-option = ""
-  name = "ohos_app_cangjie_lottie"
+  name = "lottie"
   output-type = "dynamic"
   src-dir = "./src/main/cangjie"
   target-dir = ""
   version = "1.0.0"
   package-configuration = {}
   scripts = {}
+
+[ffi]
+  [ffi.c]
+    [ffi.c.lottie_cpp]
+      path = "../lottie_cpp/build/default/intermediates/libs/default/${ABI}"
 
 [profile]
   build = {incremental = true, lto = ""}
