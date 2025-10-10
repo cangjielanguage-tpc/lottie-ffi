@@ -501,8 +501,6 @@ void LottieHandler::TriggerListenerEvent(LottieEventType type)
 bool LottieHandler::LoadAnimationData()
 {
     bool isLoadSuccess{true};
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::LoadAnimationData】--------------------[初始化]-[2]--lottieConfig_->GetAnimationData().length(): %{public}d", lottieConfig_->GetAnimationData().length());
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::LoadAnimationData】--------------------[初始化]-[2]--lottieConfig_->GetPath().isEmpty(): %{public}d", lottieConfig_->GetPath() == "");
 
     if (lottieConfig_->GetAnimationData() != "") {
         OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::LoadAnimationData】--------------------[初始化]-[2]-1");

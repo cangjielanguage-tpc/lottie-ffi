@@ -25,6 +25,7 @@ public:
     static std::string ClassName() { return "CJLottieController"; }
     
     std::shared_ptr<LottieControllerBridge> getLottieControllerBridge();
+    void destroy();
 
     OHNativeWindow* getWindow();
     void setWindow(OHNativeWindow *window);
@@ -40,6 +41,7 @@ public:
     
     std::shared_ptr<LottieXcomponentNode> getLottieXcomponentNode();
     void setLottieXcomponentNode(std::shared_ptr<LottieXcomponentNode> lottieXcomponentNode);
+    void destroyLottieXcomponentNode();
 
 private:
 

@@ -14,6 +14,12 @@ std::shared_ptr<LottieControllerBridge> CJLottieController::getLottieControllerB
     return lottieControllerBridge;
 }
 
+void CJLottieController::destroyLottieXcomponentNode()
+{
+    std::lock_guard lock_guard(locker);
+    lottieXcomponentNode_ = nullptr;
+}
+
 OHNativeWindow* CJLottieController::getWindow()
 {
     std::lock_guard lock_guard(locker);
@@ -117,8 +123,8 @@ void cj_LottieController_onSurfaceCreated(const int64_t jView, const int64_t sur
     view->setWindow(window);
     //this->window = window;
     
-    //view->setSurfaceWidth(surfaceWidth);
-    //view->setSurfaceHeight(surfaceHeight);
+    view->setSurfaceWidth(surfaceWidth);
+    view->setSurfaceHeight(surfaceHeight);
 
     //TODO:lipei------【测试中】放开 view->get()编译崩溃 ----------------------------------------------------------------
     std::shared_ptr<LottieXcomponentNode> lxnode = view->getLottieXcomponentNode();
@@ -564,6 +570,15 @@ void cj_LottieController_destroy(const int64_t ptr)
         return;
     }
     instance->Destroy();
+
+    std::shared_ptr<LottieXcomponentNode> lottieXcomponentNode = controller->getLottieXcomponentNode();
+    if (lottieXcomponentNode == NULL) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy]-LottieXcomponentNode is null.");
+        return;
+    }
+
+    lottieXcomponentNode->destroy(controller->getSurfaceWidth(), controller->getSurfaceHeight());
+    controller->setLottieXcomponentNode(nullptr);
 }
 
 void cj_LottieController_pause(const int64_t ptr)

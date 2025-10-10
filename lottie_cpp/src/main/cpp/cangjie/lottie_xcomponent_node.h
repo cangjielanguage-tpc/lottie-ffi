@@ -79,7 +79,9 @@ public:
     //TODO:lipei-----------------
     void OnSurfaceCreated(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight);
     void OnSurfaceChanged(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight);
-
+    
+    void destroy(uint64_t surfaceWidth, uint64_t surfaceHeight);
+   
 private:
     //TODO：不能直接用 OH_NativeXComponent，需要用自定义 XComponent。
     //static void OnSurfaceCreated(OH_NativeXComponent *component, void *window);

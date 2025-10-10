@@ -84,7 +84,8 @@ void DataManager::UpdataImageAssets(std::shared_ptr<rlottie::internal::model::Co
 
 bool DataManager::InitFromJson(std::string json)
 {
-    json.erase(std::remove_if(json.begin(), json.end(), ::isspace), json.end()); // 去除前后空格
+    //[nm 少了空格定位]----------------
+    //json.erase(std::remove_if(json.begin(), json.end(), ::isspace), json.end()); // 去除前后空格
     HITRACE("Lottie::Format Json", FormatJson((uint8_t *)&json[0], json.size()));
     if (!json.empty() && json.front() == '{' && json.back() == '}') {
         path_ = GeneratorKey(json);

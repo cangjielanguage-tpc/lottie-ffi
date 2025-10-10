@@ -126,4 +126,36 @@ void LottieRender::HandleCanvas(std::shared_ptr<drawing::Canvas> canvas, Calcula
     }
 }
 
+void LottieRender::destroy(const std::string xcomponentId, CalculatePosition *calculatePosition)
+{
+    if (calculatePosition->width <= 0 || calculatePosition->height <= 0) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[lipei]", "[destroy定位][LottieRender::destroy0]------------------------------------------------1-1");
+        return;
+    }
+    auto window = LottieManagerMap::getInstance().GetWindowById(xcomponentId);
+    if (!window) {
+        DRAWING_LOGE("Failed to get window for xcomponentId: %s", xcomponentId.c_str());
+        return;
+    }
+    if (gpuContext_ == nullptr) {
+        gpuContext_ = OH_Drawing_GpuContextCreate();
+    }
+    int32_t width = 0;
+    int32_t height = 0;
+    lottieRenderLayer_->SetSize(calculatePosition->width, calculatePosition->height);
+    LottieManagerMap::getInstance().GetRectById(xcomponentId, width, height);
+    if (width == 0 || height == 0) {
+        return;
+    }
+    OH_Drawing_Image_Info imageinfo = {static_cast<int32_t>(width), static_cast<int32_t>(height),
+                                       COLOR_FORMAT_RGBA_8888, ALPHA_FORMAT_PREMUL};
+    surface_ = OH_Drawing_SurfaceCreateOnScreen(gpuContext_, imageinfo, window);
+    canvas_ = std::make_shared<drawing::Canvas>(OH_Drawing_SurfaceGetCanvas(surface_));
+    this->HandleCanvas(canvas_, calculatePosition);
+
+    OH_Drawing_SurfaceFlush(surface_);
+    OH_Drawing_SurfaceDestroy(surface_);
+}
+
+
 } // namespace LottieTurbo
