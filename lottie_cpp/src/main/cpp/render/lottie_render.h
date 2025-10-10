@@ -63,6 +63,9 @@ public:
      */
     void HandleCanvas(std::shared_ptr<drawing::Canvas> canvas, CalculatePosition *calculatePosition);
 
+    void destroy(const std::string xcomponentId, CalculatePosition *calculatePosition);
+    
+
 private:
     std::shared_ptr<LottieRenderLayer> lottieRenderLayer_{nullptr};
     std::shared_ptr<drawing::Canvas> canvas_{nullptr};

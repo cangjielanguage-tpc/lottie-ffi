@@ -90,8 +90,8 @@ public:
             auto trigger = new LottieHandler::TriggerData;
             trigger->func =
                 std::bind(func, it->second->lottieHandler->lottieListener_.get(), LottieEventType::ON_DOM_LOADED);
-            //TODO:lipei------------------[2250904]----------------------------------
-            napi_call_threadsafe_function(it->second->lottieHandler->safeFunc_, trigger, napi_tsfn_blocking);
+
+            it->second->lottieHandler->safeFunc_(trigger);
         }
         return true;
     }
@@ -103,7 +103,7 @@ public:
         if (it == contentHandleMap_.end()) {
             return;
         }
-        if (!it->second->contentHandle || !it->second->lottieXcomponentNode) {
+        if (!it->second->lottieXcomponentNode) {
             DRAWING_LOGE("LottieManager::DisposeLottieNode:: Error OH_ArkUI_NodeContent_RemoveNode params NULL");
             contentHandleMap_.erase(id);
             return;

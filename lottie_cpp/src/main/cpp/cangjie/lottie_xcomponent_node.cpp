@@ -354,6 +354,8 @@ void LottieXcomponentNode::RenderOnSurfaceChanged(void *window, std::string lott
         }
         if (isOnSurfaceCreated && lottieHandler->GetLottieConfig()->GetAutoplay()) {
             lottieHandler->Play();
+        } else if (!isOnSurfaceCreated && lottieHandler->renderCurrentFrame && lottieHandler->GetIsPaused()) {
+            lottieHandler->renderCurrentFrame();
         } else if (lottieHandler->renderAndAdvanceFrame) {
             lottieHandler->renderAndAdvanceFrame();
         }
@@ -384,5 +386,11 @@ void LottieXcomponentNode::OnSurfaceChanged(void *window, std::string lottieId, 
 
 //TODO:lipei--------------暂未实现-------------------------
 //void LottieXcomponentNode::OnSurfaceDestroyed(OH_NativeXComponent *component, void *window)
+
+
+void LottieXcomponentNode::destroy(uint64_t surfaceWidth, uint64_t surfaceHeight)
+{
+    lottieRender_->destroy(lottieHandler_->GetLottieId(), (LottieTurbo::CalculatePosition *)&position_);
+}
 
 }
