@@ -5,7 +5,6 @@
 #include "lottie_config_data_bridge.h"
 #include "common/common.h"
 #include "dataManager/lottie_config_data.h"
-#include "controller/lottie_handler.h"
 #include "common/lottile_utils.h"
 
 namespace LottieTurbo {
@@ -18,22 +17,20 @@ LottieConfigBridge::LottieConfigBridge(LottieDataConfig config)
 {
     Parse(config);
 
-    //napi_value workName;
-    //napi_create_string_utf8(env, "LottieListener", NAPI_AUTO_LENGTH, &workName);
-    //napi_create_threadsafe_function(env, nullptr, nullptr, workName, 0, 1, nullptr, nullptr, nullptr,
-    //                                [](napi_env env, napi_value cb, void *context, void *data) {
-    //    auto trigger = (LottieHandler::TriggerData *)data;
-    //    if (trigger != nullptr) {
-    //        trigger->func();
-    //        delete trigger;
-    //        trigger = nullptr;
-    //    }
-    //}, &safeFunc_);
+    auto safeFunc = [](void *data) {
+        auto trigger = (LottieHandler::TriggerData *)data;
+        if (trigger != nullptr) {
+            trigger->func();
+            delete trigger;
+            trigger = nullptr;
+        }
+    };
+    safeFunc_ = safeFunc;
+
     if (listener_ != nullptr) {
         listener_->TriggerEvent(LottieEventType::ON_CONFIG_READY);
     }
 }
-
 
 bool LottieConfigBridge::Parse(LottieDataConfig config)
 {
@@ -140,9 +137,14 @@ std::unique_ptr<LottieListener> &LottieConfigBridge::GetLottieListener()
     return listener_;
 }
 
-//napi_threadsafe_function LottieConfigBridge::GetSafeFunction()
-//{
-//    return safeFunc_;
-//}
+std::function<void(void *)> LottieConfigBridge::GetSafeFunction()
+{
+    return safeFunc_;
+}
+
+void LottieConfigBridge::SetSafeFunction(std::function<void(void *)> safeFunc)
+{
+    safeFunc_ = safeFunc;
+}
 
 }

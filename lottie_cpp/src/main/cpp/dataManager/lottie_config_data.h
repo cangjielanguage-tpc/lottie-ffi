@@ -81,6 +81,8 @@ public:
     
     const double &GetRadius() const;
     
+    const double &GetbgColor() const;
+    
     //TODO:lipei---------------------------------------------
     const int64_t &GetAnimator() const;
 
@@ -100,6 +102,7 @@ protected:
     std::shared_ptr<NativeResourceManager> resManager_;
     bool useCache_{true};
     double radius_{0.0};
+    double bgColor_{0};
     
     /**
      * TODO:lipei---------------------------------------------

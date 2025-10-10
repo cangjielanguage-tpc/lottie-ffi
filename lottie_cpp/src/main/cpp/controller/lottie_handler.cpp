@@ -90,7 +90,9 @@ void LottieHandler::UpdateAbsoluteFrameToPlay(float const &relativeFrame)
 {
     auto nextFrame = relativeFrame;
     // 取模运算，将nextFrame限制在totalFrames_的范围内
-    nextFrame = std::fmod(nextFrame, totalFrames_);
+    if (nextFrame != totalFrames_) {
+        nextFrame = std::fmod(nextFrame, totalFrames_);
+    }
     if (nextFrame > totalFrames_) {
         DRAWING_LOGW("nextFrame is greater than totalFrames, nextFrame: %{public}f, totalFrames: %{public}f",
                      nextFrame, totalFrames_);
@@ -150,7 +152,8 @@ float LottieHandler::UpdateCurrentSegment(AnimationSegment const &segment)
         };
         auto trigger = new LottieHandler::TriggerData;
         trigger->func = std::bind(func, lottieListener_.get(), LottieEventType::ON_SEGMENT_START);
-        napi_call_threadsafe_function(safeFunc_, trigger, napi_tsfn_blocking);
+
+        safeFunc_(trigger);
     }
     return nextFrame;
 }
@@ -203,12 +206,14 @@ bool LottieHandler::CheckLoop()
     if (std::holds_alternative<bool>(loopValue) && std::get<bool>(loopValue)) {
         auto trigger = new LottieHandler::TriggerData;
         trigger->func = std::bind(func, lottieListener_.get(), LottieEventType::ON_LOOP_COMPLETE);
-        napi_call_threadsafe_function(safeFunc_, trigger, napi_tsfn_blocking);
+
+        safeFunc_(trigger);
         return true;
     } else if (std::holds_alternative<int>(loopValue) && playCount_ < std::get<int>(loopValue)) {
         auto trigger = new LottieHandler::TriggerData;
         trigger->func = std::bind(func, lottieListener_.get(), LottieEventType::ON_LOOP_COMPLETE);
-        napi_call_threadsafe_function(safeFunc_, trigger, napi_tsfn_blocking);
+
+        safeFunc_(trigger);
         return true;
     } else {
         // 播放完成. 停留在最后一个segment上
@@ -341,7 +346,8 @@ void LottieHandler::Complete()
         };
         auto trigger = new LottieHandler::TriggerData;
         trigger->func = std::bind(func, lottieListener_.get(), LottieEventType::ON_COMPLETE);
-        napi_call_threadsafe_function(safeFunc_, trigger, napi_tsfn_blocking);
+
+        safeFunc_(trigger);
     }
 }
 
@@ -374,7 +380,8 @@ void LottieHandler::Reload()
         };
         auto trigger = new LottieHandler::TriggerData;
         trigger->func = std::bind(func, lottieListener_.get(), type);
-        napi_call_threadsafe_function(safeFunc_, trigger, napi_tsfn_blocking);
+
+        safeFunc_(trigger);
     }
 
     if (dataManager_->player) {
@@ -419,12 +426,10 @@ void LottieHandler::ChangeColor(std::string path, std::vector<float> setColor)
     
     rlottie::Color color = {setColor[NUM_0], setColor[NUM_1], setColor[NUM_2]};
     if (!dataManager_->player) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieHandler::ChangeColor]-2");
         return;
     }
     dataManager_->player->setValue<rlottie::Property::FillColor>(path, color);
     if (size == RGBANUM) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieHandler::ChangeColor]-3");
         setColor[NUM_3] = setColor[NUM_3] * NUM_100;
         dataManager_->player->setValue<rlottie::Property::FillOpacity>(path, setColor[NUM_3]);
     }
@@ -489,7 +494,7 @@ void LottieHandler::TriggerListenerEvent(LottieEventType type)
         };
         auto trigger = new LottieHandler::TriggerData;
         trigger->func = std::bind(func, lottieListener_.get(), type);
-        napi_call_threadsafe_function(safeFunc_, trigger, napi_tsfn_blocking);
+        safeFunc_(trigger);
     }
 }
 
@@ -636,13 +641,13 @@ LottieHandler::~LottieHandler()
                 listener = nullptr;
             }
             if (safeFunc) {
-                napi_release_threadsafe_function(safeFunc, napi_tsfn_release);
+                //TODO:lipei------------------[2250923]----------------------------------
+                //napi_release_threadsafe_function(safeFunc, napi_tsfn_release);
             }
         };
         auto trigger = new LottieHandler::TriggerData;
-        trigger->func = std::bind(func, lottieListener_.release(), safeFunc_);
-        lottieListener_ = nullptr;
-        napi_call_threadsafe_function(safeFunc_, trigger, napi_tsfn_blocking);
+        //TODO:lipei------------------[2250923]----------------------------------
+        //safeFunc_(trigger);
     }
 }
 

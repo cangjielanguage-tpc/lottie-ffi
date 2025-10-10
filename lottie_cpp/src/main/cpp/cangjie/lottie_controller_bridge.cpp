@@ -118,7 +118,8 @@ void LottieControllerBridge::Destroy()
             auto trigger = new LottieHandler::TriggerData;
             trigger->func = std::bind(func, id);
             OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy定位][LottieControllerBridge::Destroy]-------------------------4- id = %{public}s", id.c_str());
-            napi_call_threadsafe_function(handler->safeFunc_, trigger, napi_tsfn_blocking);
+
+            handler->safeFunc_(trigger);
         },
         this->lottieId_);
     return;
@@ -183,6 +184,7 @@ void LottieControllerBridge::PlaySegments(AnimationSegment segmentsNew[], int ar
                 lottieHandler->SetForceFlag(forceFlag);
             }
             lottieHandler->SetSegments(std::move(segments));
+            lottieHandler->Play();
         }
     }
 

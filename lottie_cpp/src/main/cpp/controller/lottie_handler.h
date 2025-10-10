@@ -64,7 +64,8 @@ public:
     std::shared_ptr<Animator> animator_{nullptr};
     std::unique_ptr<LottieListener> lottieListener_{nullptr};
     std::shared_ptr<DataManager> dataManager_{nullptr};
-    napi_threadsafe_function safeFunc_{nullptr};
+
+    std::function<void(LottieHandler::TriggerData *)> safeFunc_;
 
     /**
      * @brief 触发监听器事件
