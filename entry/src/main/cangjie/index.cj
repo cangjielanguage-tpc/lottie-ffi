@@ -1,36 +1,128 @@
 package ohos_app_cangjie_entry
 
-internal import ohos.base.LengthProp
-internal import ohos.component.Column
-internal import ohos.component.Row
-internal import ohos.component.Text
-internal import ohos.component.CustomView
-internal import ohos.component.CJEntry
-internal import ohos.component.loadNativeView
-internal import ohos.component.FontWeight
-internal import ohos.state_manage.SubscriberManager
-internal import ohos.state_manage.ObservedProperty
-internal import ohos.state_manage.LocalStorage
-import ohos.state_macro_manage.Entry
-import ohos.state_macro_manage.Component
-import ohos.state_macro_manage.State
+import ohos.state_macro_manage.*
+
+internal import ohos.base.*
+internal import ohos.component.*
+internal import ohos.state_manage.*
+internal import ohos.resource_manager.*
+internal import ohos.router.*
+internal import ohos.prompt_action.PromptAction
+internal import ohos.hilog.Hilog
+internal import ohos.ability.*
+
+internal import lottie.*
 
 @Entry
 @Component
 class EntryView {
-    @State
-    var message: String = "Hello World"
+
+    var controller: LottieController = LottieController()
+    @State var animationData: String = ""
+    var fileName: String = "grunt.json"
 
     func build() {
-        Row {
+        Column(20) {
+
             Column {
-                Text(this.message)
-                    .fontSize(50)
-                    .fontWeight(FontWeight.Bold)
-                    .onClick {
-                        evt => this.message = "Hello Cangjie"
-                    }
-            }.width(100.percent)
-        }.height(100.percent)
+                LottieView(config: AnimationConfig(
+                    path: "/data/storage/el1/bundle/entry/resources/resfile/navidad.json",
+                    loop: 0,
+                    autoplay: false,
+                    contentMode: "Contain"
+                ), controller: controller)
+            }.width(50.percent).height(160).backgroundColor(Color.GRAY)
+
+            List() {
+                ListItem() {
+                    Column(5) {
+                        Button('核心功能').width(100.percent).height(35).shape(ShapeType.Normal)
+                        //*********************************************************************************
+                        //核心功能***************************************************************************
+                        Row(5) {
+                            Button('reload')
+                                .width(35.percent)
+                                .height(35)
+                                .shape(ShapeType.Normal)
+                                .onClick {
+                                    =>
+                                    this.controller.reload(AnimationConfig(
+                                      loop: 2,
+                                      autoplay: true,
+                                      path: "https://assets7.lottiefiles.com/packages/lf20_sF7uci.json"
+                                    ))
+                                }
+                        }
+
+                        Row(5) {
+                            Button('play')
+                                .width(33.percent)
+                                .height(35)
+                                .shape(ShapeType.Normal)
+                                .onClick {
+                                    =>
+                                    this.controller.play()
+                                }
+                            Button('pause')
+                                .width(33.percent)
+                                .height(35)
+                                .shape(ShapeType.Normal)
+                                .onClick {
+                                    =>
+                                    this.controller.pause()
+                                }
+                            Button('destroy')
+                                .width(33.percent)
+                                .height(35)
+                                .shape(ShapeType.Normal)
+                                .onClick {
+                                    =>
+                                    Hilog.error(0, "lipei", "[destroy定位]---------------------[执行 controller.destroy() 函数]------------------")
+                                    Hilog.error(0, "lipei", "[destroy定位]---------------------[执行 controller.destroy() 函数]------------------")
+                                    Hilog.error(0, "lipei", "[destroy定位]---------------------[执行 controller.destroy() 函数]------------------")
+                                    this.controller.destroy()
+                                }
+                        }
+
+                        Row(5) {
+                            Button('stop')
+                                .width(50.percent)
+                                .height(35)
+                                .shape(ShapeType.Normal)
+                                .onClick {
+                                    =>
+                                    this.controller.stop()
+                                }
+                            Button('togglePause')
+                                .width(50.percent)
+                                .height(35)
+                                .shape(ShapeType.Normal)
+                                .onClick {
+                                    =>
+                                    this.controller.togglePause()
+                                }
+                        }
+
+                    }.width(100.percent)
+                }
+            }.width(100.percent).height(90.percent).scrollBar(BarState.Off)
+
+            //Button('API列表')
+            //    .width(90.percent)
+            //    .height(50)
+            //    .shape(ShapeType.Normal)
+            //    .onClick {
+            //        =>
+            //        // API列表页面api_list.cj
+            //        Router.push(url: "ApiList")
+            //    }
+        }.width(100.percent).height(100.percent).padding(top: 20, left: 10, right: 10)
     }
+
+    //protected func aboutToAppear(): Unit {
+    //    let buffer: Array<UInt8> = loadPath(fileName, globalAbilityContext)
+    //    this.animationData = String.fromUtf8(buffer)
+    //    Hilog.error(0, "lipei", "begin---------------this.animationData.size = ${this.animationData.size}")
+    //}
+
 }

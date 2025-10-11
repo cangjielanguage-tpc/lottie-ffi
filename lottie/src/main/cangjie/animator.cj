@@ -47,8 +47,7 @@ func setAnimatorFrameRate(jView: Int64, frameRatesNew: Float64): Unit {
 func handleAnimator(state: UInt8, jView: Int64): Unit {
     if (controllerMap.contains(jView)) {
         match (state) {
-            case 0 =>
-                //controllerMap[jView].getOrThrow().create()
+            //因为编译问题，将 初始化 和 create 合二为一。
             case 1 =>
                 controllerMap[jView].getOrThrow().cancel()
             case 2 =>

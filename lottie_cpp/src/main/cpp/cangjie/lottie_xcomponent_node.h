@@ -77,7 +77,7 @@ public:
     void OnSurfaceCreated(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight);
     void OnSurfaceChanged(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight);
 
-    void destroy(uint64_t surfaceWidth, uint64_t surfaceHeight);
+    void destroy();
    
 private:
 

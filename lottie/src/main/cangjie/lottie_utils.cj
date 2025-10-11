@@ -4,6 +4,7 @@
 
 package lottie
 
+internal import ohos.hilog.*
 
 @FastNative
 foreign func free_CJBytesArray(ptr: CJBytesArray): Unit
