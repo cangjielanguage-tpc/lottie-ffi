@@ -30,12 +30,12 @@ void cj_LottieAnimator_handleAnimator(const int64_t jAnimator, Animator::FuncHan
     intptr_t viewPtrInt = static_cast<intptr_t>(jAnimator);
     CJAnimator *cjAnimator = reinterpret_cast<CJAnimator *>(viewPtrInt);
     if (!cjAnimator) {
-        ////OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieAnimator_handleAnimator", "cjAnimator is null.");
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieAnimator_handleAnimator", "cjAnimator is null.");
         return;
     }
     std::shared_ptr<Animator> animators = cjAnimator->getAnimator();
     if (!animators) {
-        ////OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieAnimator_handleAnimator", "Animator is null.");
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieAnimator_handleAnimator", "Animator is null.");
         return;
     }
     animators->g_jAnimator = jAnimator;
@@ -50,12 +50,12 @@ void cj_LottieAnimator_setAnimatorFrameRate(const int64_t jAnimator, Animator::F
     intptr_t viewPtrInt = static_cast<intptr_t>(jAnimator);
     CJAnimator *cjAnimator = reinterpret_cast<CJAnimator *>(viewPtrInt);
     if (!cjAnimator) {
-        ////OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieAnimator_setAnimatorFrameRate", "cjAnimator is null.");
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieAnimator_setAnimatorFrameRate", "cjAnimator is null.");
         return;
     }
     std::shared_ptr<Animator> animators = cjAnimator->getAnimator();
     if (!animators) {
-        ////OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieAnimator_setAnimatorFrameRate", "Animator is null.");
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieAnimator_setAnimatorFrameRate", "Animator is null.");
         return;
     }
     animators->g_jAnimator = jAnimator;

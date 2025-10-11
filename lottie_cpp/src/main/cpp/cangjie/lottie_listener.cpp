@@ -16,8 +16,7 @@ static const std::unordered_map<LottieEventType, std::string> lottieEventMap = {
     {LottieEventType::ON_DATA_FAILED, "onDataFailed"},     {LottieEventType::ON_LOADED_IMAGES, "onLoadedImages"}};
 
 
-//TODO:lipei-----------------------------------------------
-//LottieListener::LottieListener(napi_env env) : napiHelper_(NapiHelper(env))
+
 LottieListener::LottieListener()
 {
     DRAWING_LOGD("LottieListener构造");
@@ -27,21 +26,10 @@ LottieListener::~LottieListener()
 {
     DRAWING_LOGD("LottieListener析构");
     funcMap_.clear();
-    //TODO:lipei-----------------------------------------------
-    //for (auto &pair : callbackRefs_) {
-    //    this->DeleteCallbackReference(pair.second);
-    //}
-    //callbackRefs_.clear();
 }
 
 void LottieListener::InitListenerCallback(LottieListenerConfig listenerCJObject)
 {
-    // 确保 jsObject 是个对象
-    //if (!napiHelper_.CheckIsType(listenerCJObject, napi_object)) {
-    //    return;
-    //}
-    //jsThisRef_ = napiHelper_.CreateReference(listenerCJObject);
-
     for (auto &pair : lottieEventMap) {
         this->RegisterSelfCallback(listenerCJObject, pair.first);
     }
@@ -55,36 +43,30 @@ void LottieListener::RegisterSelfCallback(LottieListenerConfig listenerCJObject,
         return;
     }
 
-    //const std::string &funcName = it->second;
-    //if (!napiHelper_.CheckFuncIsExist(listenerCJObject, funcName)) {
-    //    return;
-    //}
-
-    if (it->first == LottieEventType::ON_DRAW_FRAME) {// && listenerCJObject.hasOnDrawFrame) {
+    if (it->first == LottieEventType::ON_DRAW_FRAME) {
         this->RegisterCallback(listenerCJObject.onDrawFrame, eventType);
-    } else if (it->first == LottieEventType::ON_ENTER_FRAME) {// && listenerCJObject.hasOnEnterFrame) {
+    } else if (it->first == LottieEventType::ON_ENTER_FRAME) {
         this->RegisterCallback(listenerCJObject.onEnterFrame, eventType);
-    } else if (it->first == LottieEventType::ON_LOOP_COMPLETE) {// && listenerCJObject.hasOnLoopComplete) {
+    } else if (it->first == LottieEventType::ON_LOOP_COMPLETE) {
         this->RegisterCallback(listenerCJObject.onLoopComplete, eventType);
-    } else if (it->first == LottieEventType::ON_COMPLETE) {// && listenerCJObject.hasOnComplete) {
+    } else if (it->first == LottieEventType::ON_COMPLETE) {
         this->RegisterCallback(listenerCJObject.onComplete, eventType);
-    } else if (it->first == LottieEventType::ON_SEGMENT_START) {// && listenerCJObject.hasOnSegmentStart) {
+    } else if (it->first == LottieEventType::ON_SEGMENT_START) {
         this->RegisterCallback(listenerCJObject.onSegmentStart, eventType);
-    } else if (it->first == LottieEventType::ON_DESTROY) {// && listenerCJObject.hasOnDestroy) {
+    } else if (it->first == LottieEventType::ON_DESTROY) {
         this->RegisterCallback(listenerCJObject.onDestroy, eventType);
-    } else if (it->first == LottieEventType::ON_CONFIG_READY) {// && listenerCJObject.hasOnConfigReady) {
+    } else if (it->first == LottieEventType::ON_CONFIG_READY) {
         this->RegisterCallback(listenerCJObject.onConfigReady, eventType);
-    } else if (it->first == LottieEventType::ON_DATA_READY) {// && listenerCJObject.hasOnDataReady) {
+    } else if (it->first == LottieEventType::ON_DATA_READY) {
         this->RegisterCallback(listenerCJObject.onDataReady, eventType);
-    } else if (it->first == LottieEventType::ON_DOM_LOADED) {// && listenerCJObject.hasOnDOMLoaded) {
+    } else if (it->first == LottieEventType::ON_DOM_LOADED) {
         this->RegisterCallback(listenerCJObject.onDOMLoaded, eventType);
-    } else if (it->first == LottieEventType::ON_DATA_FAILED) {// && listenerCJObject.hasOnDataFailed) {
+    } else if (it->first == LottieEventType::ON_DATA_FAILED) {
         this->RegisterCallback(listenerCJObject.onDataFailed, eventType);
-    } else if (it->first == LottieEventType::ON_LOADED_IMAGES) {// && listenerCJObject.hasOnLoadedImages) {
+    } else if (it->first == LottieEventType::ON_LOADED_IMAGES) {
         this->RegisterCallback(listenerCJObject.onLoadedImages, eventType);
     }
-    //auto jsFunc = napiHelper_.GetObjectProperty(listenerCJObject, funcName);
-    //this->RegisterCallback(jsFunc, eventType);
+
 }
 
 void LottieListener::RegisterCallback(std::function<void()> callbackFunc, LottieEventType eventType)
@@ -95,24 +77,9 @@ void LottieListener::RegisterCallback(std::function<void()> callbackFunc, Lottie
         return;
     }
     // 先删除旧的回调引用，避免内存泄漏
-    //if (callbackRefs_.find(eventType) != callbackRefs_.end()) {
-    //    napiHelper_.DeleteReference(callbackRefs_[eventType]);
-    //}
     // 保存回调引用，延长生命周期
-    //callbackRefs_[eventType] = napiHelper_.CreateReference(callbackFunc);
-
     // 注册回调
-    //funcMap_[eventType] = [this, eventType]() {
-    //    // 判断回调引用是否存在
-    //    auto it = callbackRefs_.find(eventType);
-    //    if (it == callbackRefs_.end()) {
-    //        return;
-    //    }
-    //    auto jsFunc = napiHelper_.GetReferenceValue(it->second);
-    //    auto jsThis = napiHelper_.GetReferenceValue(jsThisRef_);
-    //    napiHelper_.Call(jsThis, jsFunc, 0, nullptr);
-    //};
-    
+
     funcMap_[eventType] = callbackFunc;
 }
 
@@ -122,13 +89,6 @@ void LottieListener::UnRegisterCallback(LottieEventType eventName)
     auto it = funcMap_.find(eventName);
     if (it != funcMap_.end()) {
         funcMap_.erase(it);
-
-        //TODO:lipei-----------------------------------------------
-        //auto refIt = callbackRefs_.find(eventName);
-        //if (refIt != callbackRefs_.end()) {
-        //    napiHelper_.DeleteReference(refIt->second);
-        //    callbackRefs_.erase(refIt);
-        //}
     }
 }
 
@@ -139,15 +99,5 @@ void LottieListener::TriggerEvent(LottieEventType eventType)
         it->second();
     }
 }
-
-/*
-void LottieListener::DeleteCallbackReference(napi_ref &callbackRef)
-{
-    if (callbackRef != nullptr) {
-        napiHelper_.DeleteReference(callbackRef);
-        callbackRef = nullptr;
-    }
-}
-*/
 
 } // namespace LottieTurbo

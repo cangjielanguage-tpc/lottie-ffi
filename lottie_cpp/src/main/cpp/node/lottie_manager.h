@@ -55,7 +55,7 @@ public:
         return false;
     }
 
-    bool AddLottieNode(std::string id, //ArkUI_NodeContentHandle handle,
+    bool AddLottieNode(std::string id,
                        const std::shared_ptr<LottieXcomponentNode> &lottieXcomponentNode,
                        const std::shared_ptr<LottieHandler> &LottieHandler)
     {
@@ -67,18 +67,13 @@ public:
         contentHandleMap_.insert({id, std::make_unique<ContentHandle>()});
         it = contentHandleMap_.find(id);
         it->second->lottieHandler = LottieHandler;
-        //TODO:lipei------------------[2250904]----------------------------------
-        //it->second->contentHandle = handle;
+
         it->second->lottieXcomponentNode = lottieXcomponentNode;
 
-        //TODO:lipei------------------[2250904]----------------------------------
-        //if (!handle || !lottieXcomponentNode || !lottieXcomponentNode->GetHandle()) {
         if (!lottieXcomponentNode) {
             DRAWING_LOGE("LottieManager::AddLottieNode: Error OH_ArkUI_NodeContent_AddNode params NULL");
             return false;
         }
-        //TODO:lipei------------------[2250904]----------------------------------
-        //OH_ArkUI_NodeContent_AddNode(handle, lottieXcomponentNode->GetHandle());
         DRAWING_LOGD("LottieManager::AddNode LottieId:%{public}s", id.c_str());
         // 组件添加完成回调
         if (it->second->lottieHandler->lottieListener_) {
@@ -99,10 +94,10 @@ public:
     void DisposeLottieNode(std::string id)
     {
         auto it = contentHandleMap_.find(id);
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy定位][DisposeLottieNode]-------------------------1- id = %{public}s", id.c_str()); 
         if (it == contentHandleMap_.end()) {
             return;
         }
+
         if (!it->second->lottieXcomponentNode) {
             DRAWING_LOGE("LottieManager::DisposeLottieNode:: Error OH_ArkUI_NodeContent_RemoveNode params NULL");
             contentHandleMap_.erase(id);
@@ -112,8 +107,7 @@ public:
         // 这里停止动画后再下树清理资源
         it->second->lottieHandler->animator_->Stop();
         DRAWING_LOGD("LottieManager::DisposeLottieNode LottieId:%{public}s", id.c_str());
-        //TODO:lipei------------------[2250904]----------------------------------
-        //OH_ArkUI_NodeContent_RemoveNode(it->second->contentHandle, it->second->lottieXcomponentNode->GetHandle());
+
         LottieManagerMap::getInstance().Delete(id);
         // 清理组件的时候，把该组件产生的临时目录文件一起清除
         FileCache::GetInstance()->DeleteTempDir(tmpDir);
@@ -121,7 +115,6 @@ public:
         if (it->second->lottieHandler->lottieListener_) {
             it->second->lottieHandler->lottieListener_->TriggerEvent(LottieEventType::ON_DESTROY);
         }
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy定位][DisposeLottieNode]-------------------------2- id = %{public}s", id.c_str()); 
         contentHandleMap_.erase(id);
     }
 

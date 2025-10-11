@@ -24,10 +24,8 @@ struct LottieDataConfig {
     /**
      * 应用内的动画数据文件路径, 仅限json格式
      * path 路径支持本地文件和网络资源
-     * @example path: $rawfile('common/lottie/animation.json')
      * @example path: path: "https://xxx.com/xxxx.json"
      */
-    //public let path?: String | Resource
     char *path;
 
     /**
@@ -35,10 +33,6 @@ struct LottieDataConfig {
      */
     char *animationData;
 
-    /**
-     * 动画播放结束后, 是否循环播放，默认值true, 值为true时无限循环播放 值类型为number, 且>=1时为设置重复播放的次数
-     */
-    //public var loop: (Bool, UInt64)
     /**
      * 动画播放结束后, 是否循环播放。默认值 -1, 值为 -1 时代表无限循环播放, 值 >=1 时为设置重复播放的次数
      * 定为 Int64 数据类型，< 0 表示无限循环播放；= 0 表示 不循环播放；> 0 为设置重复播放的次数。
@@ -53,15 +47,12 @@ struct LottieDataConfig {
     /**
      * 初始化动画资源播放时的整体帧范围
      */
-    //public var initialSegment: Option<AnimationSegment> = None
-    //public var initialSegment: Option<(Float64, Float64)> = None
     double initialSegment[2];
 
     /**
      * 动画填充模式 支持填充模式：Fill, Top, Cover, Bottom, Contain  默认模式是：Contain
      */
-    //public let contentMode: ContentFIllMode = ContentFIllMode.Contain
-    char *contentMode = "Contain"; //
+    char *contentMode = "Contain";
 
     /**
      * 设置 animator 的刷帧率，范围 1 ~ 120
@@ -76,26 +67,17 @@ struct LottieDataConfig {
     /**
      * 控制动画操作
      */
-    //public var controller: Option<LottieController> = None
     /* LottieController 对应的 c 端 CJLottieController 对象的指针值。*/
     int64_t controller = 0;
 
     /**
      * 监听事件
      */
-    //public let listener: Option<LottieListener> = None
     LottieListenerConfig listener;
-
-    /**
-     * 文件读取ResManager
-     */
-    //public let resManager?: resmgr.ResourceManager
 
     /**
      * 设置待替换的图像资源(url/base64)
      */
-    //public let setImageAssetDelegate?: ImageAssetDelegate[]
-    //char *setImageAssetDelegate[0][2];
     ImageAssetDelegate *setImageAssetDelegate;
     long long setImageAssetDelegateSize;
     

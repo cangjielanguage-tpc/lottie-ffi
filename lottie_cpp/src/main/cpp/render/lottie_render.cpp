@@ -71,12 +71,11 @@ void LottieRender::RenderTree(const std::string xcomponentId, const LOTLayerNode
     surface_ = OH_Drawing_SurfaceCreateOnScreen(gpuContext_, imageinfo, window);
     canvas_ = std::make_shared<drawing::Canvas>(OH_Drawing_SurfaceGetCanvas(surface_));
     this->HandleCanvas(canvas_, calculatePosition);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieRender::RenderTree】----------【ee】");
+
     // 处理根层节点
     lottieRenderLayer_->RenderLayer(canvas_, rootNode);
     lottieRenderLayer_->PrintRenderInfo();
     OH_Drawing_SurfaceFlush(surface_);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieRender::RenderTree】----------【ee】-1");
     OH_Drawing_SurfaceDestroy(surface_);
 }
 
@@ -129,7 +128,7 @@ void LottieRender::HandleCanvas(std::shared_ptr<drawing::Canvas> canvas, Calcula
 void LottieRender::destroy(const std::string xcomponentId, CalculatePosition *calculatePosition)
 {
     if (calculatePosition->width <= 0 || calculatePosition->height <= 0) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[lipei]", "[destroy定位][LottieRender::destroy0]------------------------------------------------1-1");
+        DRAWING_LOGE("Invalid parameters for RenderTree");
         return;
     }
     auto window = LottieManagerMap::getInstance().GetWindowById(xcomponentId);

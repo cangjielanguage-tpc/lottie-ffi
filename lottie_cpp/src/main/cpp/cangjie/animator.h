@@ -47,7 +47,6 @@ public:
      */
     void UpdateFrameRateRange();
 
-    //void Init(ArkUI_ContextHandle context);
     void Init();
     std::function<void()> FunctionCallBack;
     void Play();
@@ -65,19 +64,8 @@ public:
     int64_t g_jAnimator = 0;
 
 private:
-    //int32_t duration_{0};
-    //ArkUI_AnimationCurve easing_{ARKUI_CURVE_LINEAR};
-    //int32_t delay_{0};
-    //ArkUI_AnimationDirection direction_{ARKUI_ANIMATION_DIRECTION_NORMAL};
-    //int32_t iterations_{-1};
-    //float begin_{0};
-    //float end_{1};
+
     ArkUI_ExpectedFrameRateRange frameRateRange_{.min = 0, .max = 0, .expected = 0};
-    //ArkUI_AnimationFillMode fill_{ARKUI_ANIMATION_FILL_MODE_FORWARDS};
-    //ArkUI_AnimatorOption *animatorOption_{nullptr};
-    //ArkUI_AnimatorHandle animatorHandle_{nullptr};
-    //ArkUI_NativeAnimateAPI_1 *animateAPi_1_{nullptr};
-    //static void OnCallBack(ArkUI_AnimatorOnFrameEvent *event);
     std::atomic<AnimatorStatus> status_{Animator::AnimatorStatus::IDLE};
     
     /**

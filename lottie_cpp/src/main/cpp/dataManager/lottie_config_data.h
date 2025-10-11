@@ -82,8 +82,7 @@ public:
     const double &GetRadius() const;
     
     const double &GetbgColor() const;
-    
-    //TODO:lipei---------------------------------------------
+
     const int64_t &GetAnimator() const;
 
 protected:
@@ -105,7 +104,6 @@ protected:
     double bgColor_{0};
     
     /**
-     * TODO:lipei---------------------------------------------
      * cangjie 端利用 @ohos.animator 和 c 交互，c 端 Animator 对象的指针值。
      */
     int64_t animator;

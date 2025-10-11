@@ -73,7 +73,6 @@ bool LottieManagerMap::SetWindowById(const std::string &id, void *window)
 {
     auto it = lottieHandlerMap_.find(id);
     if (it != lottieHandlerMap_.end()) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieManagerMap::SetWindowById】----------[定位]--id: %{public}s", id.c_str());
         it->second->window = window;
         return true;
     }
