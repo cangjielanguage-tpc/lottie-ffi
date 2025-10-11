@@ -258,10 +258,7 @@ void LottieXcomponentNode::RenderOnSurfaceChanged(void *window, std::string lott
         DRAWING_LOGE("LottieXcomponentNode::RenderOnSurfaceChanged: Error GetXComponentSize Failed");
         return;
     }
-    
-    DRAWING_LOGD("RenderOnSurfaceChanged ret=%{public}d width=%{public}lu,"
-                 "height=%{public}lu id=%{public}s",
-                 ret, width, height, idStr);
+
     if (isOnSurfaceCreated) {
         LottieManagerMap::getInstance().SetWindowById(idStr, window);
     }
@@ -297,7 +294,7 @@ void LottieXcomponentNode::OnSurfaceChanged(void *window, std::string lottieId, 
     RenderOnSurfaceChanged(window, lottieId, surfaceWidth, surfaceHeight, false);
 }
 
-void LottieXcomponentNode::destroy(uint64_t surfaceWidth, uint64_t surfaceHeight)
+void LottieXcomponentNode::destroy()
 {
     lottieRender_->destroy(lottieHandler_->GetLottieId(), (LottieTurbo::CalculatePosition *)&position_);
 }

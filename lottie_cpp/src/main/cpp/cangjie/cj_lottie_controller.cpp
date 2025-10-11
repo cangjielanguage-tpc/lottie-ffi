@@ -543,6 +543,11 @@ void cj_LottieController_destroy(const int64_t ptr)
     }
     intptr_t ptrInt = static_cast<intptr_t>(ptr);
     CJLottieController *controller = reinterpret_cast<CJLottieController *>(ptrInt);
+    if (controller == NULL) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy]-LottieControllerBridge is null.");
+        return;
+    }
+
     std::shared_ptr<LottieControllerBridge> instance = controller->getLottieControllerBridge();
     if (instance == NULL) {
         OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy]-LottieControllerBridge is null.");
@@ -550,15 +555,10 @@ void cj_LottieController_destroy(const int64_t ptr)
     }
 
     instance->Destroy();
+    controller->destroyLottieXcomponentNode();
 
-    std::shared_ptr<LottieXcomponentNode> lottieXcomponentNode = controller->getLottieXcomponentNode();
-    if (lottieXcomponentNode == NULL) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy]-LottieXcomponentNode is null.");
-        return;
-    }
-
-    lottieXcomponentNode->destroy(controller->getSurfaceWidth(), controller->getSurfaceHeight());
     controller->setLottieXcomponentNode(nullptr);
+    controller->setWindow(nullptr);
 }
 
 void cj_LottieController_pause(const int64_t ptr)

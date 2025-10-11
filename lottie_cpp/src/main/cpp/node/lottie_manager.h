@@ -107,6 +107,9 @@ public:
         // 这里停止动画后再下树清理资源
         it->second->lottieHandler->animator_->Stop();
         DRAWING_LOGD("LottieManager::DisposeLottieNode LottieId:%{public}s", id.c_str());
+        
+        //画布置空。
+        it->second->lottieXcomponentNode->destroy();
 
         LottieManagerMap::getInstance().Delete(id);
         // 清理组件的时候，把该组件产生的临时目录文件一起清除

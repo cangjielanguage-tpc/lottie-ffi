@@ -33,13 +33,13 @@
 #include <string>
 #include <type_traits>
 
-enum class LogLevel : uint8_t { INFO, WARN, CRIT, OFF };
-
+enum class VDebugLevel : uint8_t { INFO, WARN, CRIT, OFF };
 class VDebug {
+
 public:
     VDebug();
     VDebug& debug() { return *this; }
-    VDebug(LogLevel level, char const* file, char const* function,
+    VDebug(VDebugLevel level, char const* file, char const* function,
            uint32_t line);
     ~VDebug();
 
@@ -121,9 +121,9 @@ struct VDebugServer {
     bool operator==(VDebug&);
 };
 
-void set_log_level(LogLevel level);
+void set_log_level(VDebugLevel level);
 
-bool is_logged(LogLevel level);
+bool is_logged(VDebugLevel level);
 
 /*
  * Non guaranteed logging. Uses a ring buffer to hold log lines.
@@ -166,9 +166,9 @@ void initialize(NonGuaranteedLogger ngl, std::string const& log_directory,
 
 #define VDEBUG_LOG(LEVEL) \
     VDebugServer() == VDebug(LEVEL, __FILE__, __func__, __LINE__).debug()
-#define vDebug is_logged(LogLevel::INFO) && VDEBUG_LOG(LogLevel::INFO)
-#define vWarning is_logged(LogLevel::WARN) && VDEBUG_LOG(LogLevel::WARN)
-#define vCritical is_logged(LogLevel::CRIT) && VDEBUG_LOG(LogLevel::CRIT)
+#define vDebug is_logged(VDebugLevel::INFO) && VDEBUG_LOG(VDebugLevel::INFO)
+#define vWarning is_logged(VDebugLevel::WARN) && VDEBUG_LOG(VDebugLevel::WARN)
+#define vCritical is_logged(VDebugLevel::CRIT) && VDEBUG_LOG(VDebugLevel::CRIT)
 
 #else
 

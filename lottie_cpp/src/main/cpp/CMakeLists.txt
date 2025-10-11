@@ -22,12 +22,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 add_subdirectory(thirdparty)
 
 add_library(lottie_cpp SHARED
-                           #napi_init.cpp
-                           cangjie/cj_pag.cpp
                            cangjie/cj_unique_id.cpp
                            cangjie/animator.cpp
                            cangjie/cj_animator.cpp
-                           #cangjie/cj_lottie_view_controller.cpp
                            cangjie/cj_lottie_controller.cpp
                            cangjie/init.cpp
                            cangjie/lottie_config_data_bridge.cpp
@@ -39,18 +36,12 @@ add_library(lottie_cpp SHARED
                            cangjie/lottie_xcomponent_node.cpp
                            task_pool/task_pool.cpp
                            datamanager/lottie_config_data.cpp
-                           #datamanager/lottie_config_data_bridge.cpp
                            datamanager/data_parse.cpp
                            cache/file_cache.cpp
                            cache/generator_key.cpp
                            cache/memory_cache.cpp
-                           #node/lottie_listener.cpp
                            controller/lottie_handler.cpp
-                           #controller/lottie_controller_bridge.cpp
-                           #animator/animator.cpp
                            datamanager/data_manager.cpp
-                           #common/napi_helper.cpp
-                           #node/lottie_xcomponent_node.cpp
                            render/lottie_render.cpp
                            render/lottie_render_layer.cpp
                            render/lottie_render_node.cpp

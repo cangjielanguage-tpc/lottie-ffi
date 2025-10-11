@@ -89,16 +89,16 @@ typedef std::tuple<char, uint32_t, uint64_t, int32_t, int64_t, double,
                    VDebug::string_literal_t, char*>
     SupportedTypes;
 
-char const* to_string(LogLevel loglevel)
+char const* to_string(VDebugLevel loglevel)
 {
     switch (loglevel) {
-    case LogLevel::OFF:
+    case VDebugLevel::OFF:
         return "OFF";
-    case LogLevel::INFO:
+    case VDebugLevel::INFO:
         return "INFO";
-    case LogLevel::WARN:
+    case VDebugLevel::WARN:
         return "WARN";
-    case LogLevel::CRIT:
+    case VDebugLevel::CRIT:
         return "CRIT";
     }
     return "XXXX";
@@ -119,7 +119,7 @@ void VDebug::encode(Arg arg, uint8_t type_id)
     encode<Arg>(arg);
 }
 
-VDebug::VDebug(LogLevel level, char const* file, char const* function,
+VDebug::VDebug(VDebugLevel level, char const* file, char const* function,
                uint32_t line)
     : m_bytes_used(0), m_buffer_size(sizeof(m_stack_buffer))
 {
@@ -128,8 +128,8 @@ VDebug::VDebug(LogLevel level, char const* file, char const* function,
     encode<string_literal_t>(string_literal_t(file));
     encode<string_literal_t>(string_literal_t(function));
     encode<uint32_t>(line);
-    encode<LogLevel>(level);
-    if (level == LogLevel::INFO) {
+    encode<VDebugLevel>(level)
+    if (level == VDebugLevel::INFO) {
         m_logAll = false;
     } else {
         m_logAll = true;
@@ -152,8 +152,8 @@ void VDebug::stringify(std::ostream& os)
     b += sizeof(string_literal_t);
     uint32_t line = *reinterpret_cast<uint32_t*>(b);
     b += sizeof(uint32_t);
-    LogLevel loglevel = *reinterpret_cast<LogLevel*>(b);
-    b += sizeof(LogLevel);
+    VDebugLevel loglevel = *reinterpret_cast<VDebugLevel*>(b);
+    b += sizeof(VDebugLevel);
     if (m_logAll) {
         format_timestamp(os, timestamp);
 
@@ -164,7 +164,7 @@ void VDebug::stringify(std::ostream& os)
     stringify(os, b, end);
     os << std::endl;
 
-    if (loglevel >= LogLevel::CRIT) os.flush();
+    if (loglevel >= VDebugLevel::CRIT) os.flush();
 }
 
 template <typename Arg>
@@ -691,7 +691,7 @@ public:
         while (m_state.load(std::memory_order_acquire) == State::INIT)
             std::this_thread::sleep_for(std::chrono::microseconds(50));
 
-        VDebug logline(LogLevel::INFO, nullptr, nullptr, 0);
+        VDebug logline(VDebugLevel::INFO, nullptr, nullptr, 0);
 
         while (m_state.load() == State::READY) {
             if (m_buffer_base->try_pop(logline))
@@ -744,12 +744,12 @@ void initialize(GuaranteedLogger gl, std::string const& log_directory,
 
 std::atomic<unsigned int> loglevel = {0};
 
-void set_log_level(LogLevel level)
+void set_log_level(VDebugLevel level)
 {
     loglevel.store(static_cast<unsigned int>(level), std::memory_order_release);
 }
 
-bool is_logged(LogLevel level)
+bool is_logged(VDebugLevel level)
 {
     return static_cast<unsigned int>(level) >=
            loglevel.load(std::memory_order_relaxed);

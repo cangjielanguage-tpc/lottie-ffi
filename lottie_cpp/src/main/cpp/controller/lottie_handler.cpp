@@ -608,7 +608,8 @@ LottieHandler::~LottieHandler()
             }
         };
         auto trigger = new LottieHandler::TriggerData;
-        safeFunc_(trigger);
+        //TODO:lipei------------------[2250923]----------------------------------
+        //safeFunc_(trigger);
     }
 }
 
