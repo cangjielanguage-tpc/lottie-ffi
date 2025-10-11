@@ -5,7 +5,6 @@
 #include "lottie_controller_bridge.h"
 
 #include "cangjie/lottie_controller_bridge.h"
-//#include "common/napi_helper.h"
 #include "common/number_constant.h"
 #include "lottie_listener.h"
 #include "node/lottie_manager.h"
@@ -101,23 +100,19 @@ void LottieControllerBridge::Destroy()
 {
     //std::lock_guard lock_guard(locker);
     auto handler = LottieManager::GetInstance().GetHandleById(this->lottieId_);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy定位][LottieControllerBridge::Destroy]-------------------------1");
     if (handler == nullptr || handler->isDestroy_) {
         return;
     }
     handler->isDestroy_ = true;
     TaskPoolLocal::GetInstance().PushTask(
         [](std::string id) {
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy定位][LottieControllerBridge::Destroy]-------------------------2- id = %{public}s", id.c_str());      
             auto handler = LottieManager::GetInstance().GetHandleById(id);
             if (handler == nullptr) {
                 return;
             }
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy定位][LottieControllerBridge::Destroy]-------------------------3- id = %{public}s", id.c_str()); 
             auto func = [](std::string id) { LottieManager::GetInstance().DisposeLottieNode(id); };
             auto trigger = new LottieHandler::TriggerData;
             trigger->func = std::bind(func, id);
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[destroy定位][LottieControllerBridge::Destroy]-------------------------4- id = %{public}s", id.c_str());
 
             handler->safeFunc_(trigger);
         },
@@ -282,7 +277,7 @@ void LottieControllerBridge::RemoveEventListener(char *eventName, CallbackFunc c
         if (!hasCallbackFunc) {
             return;
         }
-        //TODO: lipei---是要调用一下传入的函数么？？？
+        //是要调用一下传入的函数么？？？
         callback();
     }
     return;
@@ -292,23 +287,18 @@ void LottieControllerBridge::ChangeColor(char *layer, double *startColor, int st
 {
     //std::lock_guard lock_guard(locker);
     auto lottieHandler = LottieManager::GetInstance().GetHandleById(this->lottieId_);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieControllerBridge::ChangeColor]-1- layer = %{public}s", layer);
     if (lottieHandler == nullptr) {
         return;
     }
     auto layerName = layer;
-    
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieControllerBridge::ChangeColor]-2- endColorLen = %{public}d", endColorLen);
 
     if (endColorLen == 0) {
         auto length = startColorLen;
         std::vector<float> color;
         for (int i = 0; i < length; i++) {
             auto num = startColor[i];
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieControllerBridge::ChangeColor]-3- color[%{public}d] = %{public}f",i, num);
             color.push_back(num);
         }
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieControllerBridge::ChangeColor]-5- color.size = %{public}d", color.size());
         lottieHandler->ChangeColor(layerName, color);
     } else if (endColorLen > 0) {
         auto startLenth = startColorLen;
@@ -334,11 +324,8 @@ void LottieControllerBridge::UpdateLottieConfig(LottieDataConfig config,
                                                 std::shared_ptr<LottieHandler>& lottieHandler)
 {
     //std::lock_guard lock_guard(locker);
-    //TODO: 处理 resManager 字段 -- 
-    //TODO: cj 的 ResourceManager 对象传不到 c代码层，改成在 cj 直接处理资源，转为 json 字符串或者 Byte 数组？？？
-    //if (configData->GetResManager()) {
-    //    lottieHandler->dataManager_->mNativeResMgr_ = configData->GetResManager();
-    //}
+    //处理 resManager 字段 -- 
+    //cj 的 ResourceManager 对象传不到 c代码层，改成在 cj 直接处理资源，转为 json 字符串或者 Byte 数组？？？
 
     //处理 loop 字段
     /**
@@ -361,10 +348,8 @@ void LottieControllerBridge::UpdateLottieConfig(LottieDataConfig config,
     lottieHandler->GetLottieConfig()->SetAutoplay(autoplay);
 
     std::string path = config.path;
-    //TODO:暂时不做 path 字段兼容 Resource 类型。
-    //Resource resource;
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieControllerBridge::UpdateLottieConfig】----------------------path.length() = %{public}d", path.length());
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieControllerBridge::UpdateLottieConfig】----------------------path = %{public}s", path.c_str());
+    //暂时不做 path 字段兼容 Resource 类型。
+
     if (!path.empty()) {
         lottieHandler->GetLottieConfig()->SetPath(path);
     }
@@ -390,31 +375,24 @@ void LottieControllerBridge::UpdateLottieConfig(LottieDataConfig config,
     }
 
     std::string animationData = config.animationData;
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieControllerBridge::UpdateLottieConfig】---------------------- animationData.length() = %{public}d", animationData.length());
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieControllerBridge::UpdateLottieConfig】---------------------- !animationData.empty() = %{public}d", !animationData.empty());
     if (!animationData.empty() || animationData.length() != lottieHandler->GetLottieConfig()->GetAnimationData().length()) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieControllerBridge::UpdateLottieConfig】-------------------2--- !animationData.empty() = %{public}d", !animationData.empty());
         lottieHandler->GetLottieConfig()->SetAnimationData(animationData);
     }
 
     auto &imgAssets = const_cast<ImageAssetDelegateType &>(lottieHandler->
                       GetLottieConfig()->GetImageAssetDelegate());
     imgAssets->clear();
-    //if (configData->GetConfigValue(config, imgAssets, "setImageAssetDelegate") &&
-    //    lottieHandler->dataManager_ != nullptr) {
-    //    lottieHandler->dataManager_->SetImageAssetDelegate(imgAssets);
-    //}
+
     if (config.setImageAssetDelegateSize > 0 && lottieHandler->dataManager_ != nullptr) {
         for (int index = 0; index < config.setImageAssetDelegateSize; index++) {
             auto rst = config.setImageAssetDelegate[index];
             ImageAssetDelegate iad = ImageAssetDelegate();
             iad.refId = rst.refId;
             iad.fileName = rst.fileName;
-            
-            //imgAssets->push_back(iad);
+
             imgAssets->emplace_back(iad);  // 更高效的方式
         }
-        //imgAssets = std::make_shared<std::vector<ImageAssetDelegate>>(imgAssets);
+
         lottieHandler->dataManager_->SetImageAssetDelegate(imgAssets);
     }
 }
@@ -424,35 +402,27 @@ void LottieControllerBridge::UpdateLottieConfig(LottieDataConfig config,
 void LottieControllerBridge::ReLoad(LottieDataConfig config)
 {
     //std::lock_guard lock_guard(locker);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl", "%{public}s", "--ReLoad--00----");
     auto configData = std::make_shared<LottieConfigBridge>(config);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieControllerBridge::ReLoad】----------------------this->lottieId_ = %{public}s", this->lottieId_.c_str());
     auto lottieHandler = LottieManager::GetInstance().GetHandleById(this->lottieId_);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieControllerBridge::ReLoad】----------------------lottieHandler == nullptr: %{public}d", lottieHandler == nullptr);
     if (lottieHandler == nullptr) {
         return;
     }
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl", "%{public}s", "--ReLoad--01----");
     // 更新配置
     UpdateLottieConfig(config, configData, lottieHandler);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl", "%{public}s", "--ReLoad--02----");
+
     // 执行重载任务
     TaskPoolLocal::GetInstance().PushTask(
         [](std::shared_ptr<LottieHandler> handler) {
             if (handler->isDestroy_) {
                 return;
             }
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[DataManager]", "TODO:lipei------------------[LottieControllerBridge::ReLoad] - 1");
             handler->Reload();
             if (handler->updateContentMode) {
                 handler->updateContentMode();
             }
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[DataManager]", "TODO:lipei------------------[LottieControllerBridge::ReLoad] - 2");
             if (handler->GetLottieConfig()->GetAutoplay()) {
-                OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[DataManager]", "TODO:lipei------------------[LottieControllerBridge::ReLoad] - 2-1");    
                 handler->Play();
             } else if (handler->renderAndAdvanceFrame) {
-                OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[DataManager]", "TODO:lipei------------------[LottieControllerBridge::ReLoad] - 2-2");
                 handler->renderAndAdvanceFrame();
             }
         },
@@ -521,14 +491,7 @@ void LottieControllerBridge::SetFrameRate(double frameRateNew)
 void LottieControllerBridge::SetId(char *lottieId)
 {
     //std::lock_guard lock_guard(locker);
-    //TODO:lipei-----------------[寻找崩溃的原因]----------------------
     this->lottieId_ = lottieId;
-    //std::lock_guard<std::mutex> lock_guard(locker);
-    //if (this != nullptr) {
-    //    this->lottieId_ = lottieId;
-    //    //DRAWING_LOGD("SetId %{public}s", lottieId);
-    //}
-    //return;
 }
 
 CJBytesArray LottieControllerBridge::GetId()
@@ -790,10 +753,6 @@ CJAnimationSegmentArray LottieControllerBridge::GetSegments()
     }
     return CJAnimationSegmentArray{len, result};
 }
-
-
-
-
 
 void LottieControllerBridge::SetLottieId(std::string lottieId)
 {

@@ -52,16 +52,7 @@ bool LottieConfigBridge::Parse(LottieDataConfig config)
     this->autoplay_ = config.autoplay;
 
     //处理 animationData/path 字段
-    //TODO:暂时不做 path 字段兼容 Resource 类型。
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieConfigBridge::Parse】----------------------this->animationData_.length() = %{public}d", this->animationData_.length());
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieConfigBridge::Parse】----------------------strlen(config.animationData) = %{public}d", strlen(config.animationData));
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieConfigBridge::Parse】----------------------config.animationData != 空字符串 = %{public}d", config.animationData != "");
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieConfigBridge::Parse】----------------------strcmp(config.animationData, 空字符串) == 0 = %{public}d", strcmp(config.animationData, "") == 0);
-    ////OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieConfigBridge::Parse】----------------------config.animationData = %{public}s", config.animationData);
 
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieConfigBridge::Parse】----------------------config.path != 空字符串 = %{public}d", config.path != "");
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieConfigBridge::Parse】----------------------strcmp(config.path, 空字符串) == 0 = %{public}d", strcmp(config.path, "") == 0);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieConfigBridge::Parse】----------------------config.path = %{public}s", config.path);
     if (strcmp(config.animationData, "") != 0) {
         this->animationData_ = config.animationData;
     } else if (strcmp(config.path, "") != 0) {
@@ -91,15 +82,13 @@ bool LottieConfigBridge::Parse(LottieDataConfig config)
 
     //处理 setImageAssetDelegate 字段
     if (config.setImageAssetDelegateSize > 0) {
-        //std::make_shared<std::vector<ImageAssetDelegate>> imgAssets = std::make_shared<std::vector<ImageAssetDelegate>>();
         std::vector<ImageAssetDelegate> imgAssets = std::vector<ImageAssetDelegate>();
         for (int index = 0; index < config.setImageAssetDelegateSize; index++) {
             auto rst = config.setImageAssetDelegate[index];
             ImageAssetDelegate iad = ImageAssetDelegate();
             iad.refId = rst.refId;
             iad.fileName = rst.fileName;
-            
-            //imgAssets.push_back(iad);
+
             imgAssets.emplace_back(iad);  // 更高效的方式
         }
         this->imgAssets_ = std::make_shared<std::vector<ImageAssetDelegate>>(imgAssets);
@@ -111,11 +100,12 @@ bool LottieConfigBridge::Parse(LottieDataConfig config)
     //处理 density 字段
     DENSITY_DPI = config.density;
 
-    //TODO: 处理 resManager 字段 -- 
-    //TODO: cj 的 ResourceManager 对象传不到 c代码层，改成在 cj 直接处理资源，转为 json 字符串或者 Byte 数组？？？
-    //if (!GetResourceManager(value)) {
-    //    DRAWING_LOGD("Parse context error");
-    //}
+    //处理 resManager 字段 -- 
+    //cj 的 ResourceManager 对象传不到 c代码层，改成在 cj 直接处理资源，转为 json 字符串或者 Byte 数组？？？
+
+    //TODO:lipei----------------[225925]--------------------
+    //处理 density 字段
+    //bgColor_ = config.bgColor;
     
     //处理 listener 字段
     if (listener_ == nullptr) {

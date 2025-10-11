@@ -27,8 +27,5 @@ CJBytesArray cj_LottieView_uniqueID()
     return result;
 }
 
-
-
 }
 }
-

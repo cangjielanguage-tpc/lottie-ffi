@@ -254,7 +254,6 @@ void LottieHandler::ResetLastTimeStamp()
 
 void LottieHandler::Play()
 {
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::Play】----------3--isPaused_: %{public}d", isPaused_);
     if (isPaused_) {
         isPaused_ = false;
         this->ResetLastTimeStamp();
@@ -355,19 +354,13 @@ void LottieHandler::Reload()
 {
     Stop();
     bool isLoadSuccess{true};
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::Reload】--------------------[Reload]-[2]--lottieConfig_->GetAnimationData().length(): %{public}d", lottieConfig_->GetAnimationData().length());
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::Reload】--------------------[Reload]-[2]--lottieConfig_->GetPath().isEmpty(): %{public}d", lottieConfig_->GetPath() == "");
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::Reload】--------------------[Reload]-[2]--lottieConfig_->GetPath(): %{public}s", lottieConfig_->GetPath().c_str());
 
     LottieEventType type;
     if (lottieConfig_->GetAnimationData() != "") {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::Reload】--------------------[Reload]-[2]-1");
         isLoadSuccess = dataManager_->InitFromJson(lottieConfig_->GetAnimationData());
     } else if (lottieConfig_->GetPath() != "") {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::Reload】--------------------[Reload]-[2]-2");
         isLoadSuccess = dataManager_->InitFromFile(lottieConfig_->GetPath());
     } else {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::Reload】--------------------[Reload]-[2]-3");
         isLoadSuccess = dataManager_->InitFromFile(lottieConfig_->GetResource());
     }
     // 数据加载失败，包含json文件解析及其图片数据获取失败 或者成功type
@@ -417,13 +410,7 @@ void LottieHandler::ChangeColor(std::string path, std::vector<float> setColor)
     setColor[NUM_0] = setColor[NUM_0] / UINT8_MAX;
     setColor[NUM_1] = setColor[NUM_1] / UINT8_MAX;
     setColor[NUM_2] = setColor[NUM_2] / UINT8_MAX;
-    
-        
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieHandler::ChangeColor]-0- setColor[NUM_0] = %{public}f", setColor[NUM_0]);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieHandler::ChangeColor]-0- setColor[NUM_1] = %{public}f", setColor[NUM_1]);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "[CJLottieController]", "[changeColor测试]------------------[LottieHandler::ChangeColor]-0- setColor[NUM_2] = %{public}f", setColor[NUM_2]);
 
-    
     rlottie::Color color = {setColor[NUM_0], setColor[NUM_1], setColor[NUM_2]};
     if (!dataManager_->player) {
         return;
@@ -460,13 +447,6 @@ void LottieHandler::ChangeColor(std::string path, std::vector<float> startColor,
     }
 }
 
-//TODO:lipei--------------------[20250905]-------------------------
-//void LottieHandler::SetAnimator(ArkUI_ContextHandle context)
-//{
-//    if (context != nullptr) {
-//        animator_->Init(context);
-//    }
-//}
 void LottieHandler::SetAnimator()
 {
     animator_->Init();
@@ -479,7 +459,6 @@ void LottieHandler::SetRenderCallBack(std::function<void()> func)
 
 void LottieHandler::SetAnimatorCallBack(std::function<void()> func)
 {
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::SetAnimatorCallBack】----------[animator_->FunctionCallBack = func]");
     animator_->FunctionCallBack = func;
     renderAndAdvanceFrame = func;
 }
@@ -503,13 +482,10 @@ bool LottieHandler::LoadAnimationData()
     bool isLoadSuccess{true};
 
     if (lottieConfig_->GetAnimationData() != "") {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::LoadAnimationData】--------------------[初始化]-[2]-1");
         isLoadSuccess = dataManager_->InitFromJson(lottieConfig_->GetAnimationData());
     } else if (lottieConfig_->GetPath() != "") {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::LoadAnimationData】--------------------[初始化]-[2]-2");
         isLoadSuccess = dataManager_->InitFromFile(lottieConfig_->GetPath());
     } else {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::LoadAnimationData】--------------------[初始化]-[2]-3");
         isLoadSuccess = dataManager_->InitFromFile(lottieConfig_->GetResource());
     }
 
@@ -562,27 +538,22 @@ void LottieHandler::ConfigureFrameRate()
 
 bool LottieHandler::InitHandleData(void)
 {
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::InitHandleData】--------------------[初始化]-[1]");
     // 加载动画数据
     bool isLoadSuccess = LoadAnimationData();
     if (!isLoadSuccess) {
         return false;
     }
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::InitHandleData】--------------------[初始化]-[1]-1");
 
     // 初始化动画参数
     if (!InitializeAnimationParameters()) {
         return false;
     }
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::InitHandleData】--------------------[初始化]-[1]-2");
 
     // 配置帧率
     ConfigureFrameRate();
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::InitHandleData】--------------------[初始化]-[1]-3");
 
     // 触发数据就绪事件
     TriggerListenerEvent(LottieEventType::ON_DATA_READY);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieHandler::InitHandleData】--------------------[初始化]-[1]-4");
 
     return true;
 }
@@ -593,9 +564,7 @@ LottieHandler::LottieHandler(std::string lottieId, std::shared_ptr<LottieConfig>
     const float rate = 1000.0;
     const float defFrameRate = 60.0f;
 
-
-    //TODO:lipei--------直接在 cj 侧创建 @ohos.animator，不要调用 node->SetAnimator 在 c 侧创建新的 Animator。
-    //animator_ = std::make_shared<Animator>();
+    //直接在 cj 侧创建 @ohos.animator，不要调用 node->SetAnimator 在 c 侧创建新的 Animator。
     int64_t ptr = lottieConfig->GetAnimator();
     if (ptr <= 0) {
         OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieHandler::LottieHandler", "CJAnimator's pointer <= 0.");    
@@ -613,7 +582,6 @@ LottieHandler::LottieHandler(std::string lottieId, std::shared_ptr<LottieConfig>
         return;
     }
     animator_ = animators;
-
 
     dataManager_ = std::make_shared<DataManager>();
     dataManager_->mNativeResMgr_ = lottieConfig_->GetResManager();
@@ -638,14 +606,9 @@ LottieHandler::~LottieHandler()
                 delete listener;
                 listener = nullptr;
             }
-            if (safeFunc) {
-                //TODO:lipei------------------[2250923]----------------------------------
-                //napi_release_threadsafe_function(safeFunc, napi_tsfn_release);
-            }
         };
         auto trigger = new LottieHandler::TriggerData;
-        //TODO:lipei------------------[2250923]----------------------------------
-        //safeFunc_(trigger);
+        safeFunc_(trigger);
     }
 }
 

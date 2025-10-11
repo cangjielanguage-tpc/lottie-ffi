@@ -12,17 +12,6 @@ namespace LottieTurbo {
 extern "C" {
 
 struct LottieListenerConfig{
-//    bool hasOnDrawFrame = false;
-//    bool hasOnEnterFrame = false;
-//    bool hasOnLoopComplete = false;
-//    bool hasOnComplete = false;
-//    bool hasOnSegmentStart = false;
-//    bool hasOnDestroy = false;
-//    bool hasOnConfigReady = false;
-//    bool hasOnDataReady = false;
-//    bool hasOnDOMLoaded = false;
-//    bool hasOnDataFailed = false;
-//    bool hasOnLoadedImages = false;
 
     void (*onDrawFrame)();
     void (*onEnterFrame)();
@@ -35,17 +24,6 @@ struct LottieListenerConfig{
     void (*onDOMLoaded)();
     void (*onDataFailed)();
     void (*onLoadedImages)();
-//    std::function<void()> onDrawFrame;
-//    std::function<void()> onEnterFrame;
-//    std::function<void()> onLoopComplete;
-//    std::function<void()> onComplete;
-//    std::function<void()> onSegmentStart;
-//    std::function<void()> onDestroy;
-//    std::function<void()> onConfigReady;
-//    std::function<void()> onDataReady;
-//    std::function<void()> onDOMLoaded;
-//    std::function<void()> onDataFailed;
-//    std::function<void()> onLoadedImages;
 
 };
 

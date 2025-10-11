@@ -106,9 +106,6 @@ public class LottieController <: XComponentController {
         }
     }
 
-    //protected override func onSurfaceDestroyed(surfaceId: String) {
-    //}
-
     public func getPtr(): Int64 {
         return this.ptr
     }
@@ -642,7 +639,7 @@ public class LottieController <: XComponentController {
         unsafe {
             let startColorLen: Int64 = startColor.size
             let endColorLen: Int64 = endColor.size
-            Hilog.error(0, "lipei", "[changeColor测试]---------------------------------------startColor = ${startColor}")
+
             let startHandle: CPointerHandle<Float64> = acquireArrayRawData(startColor)
             let endHandle: CPointerHandle<Float64> = acquireArrayRawData(endColor)
             let layers: CString = LibC.mallocCString(layer)

@@ -30,8 +30,6 @@ public:
 public:
     LottieXcomponentNode(std::string xcomponentId, float radius);
     ~LottieXcomponentNode();
-    //TODO:lipei--------------------[20250905]-------------------------
-    //ArkUI_NodeHandle GetHandle() const;
 
     /**
      * @brief 创建Xcomponent组件并节点上树
@@ -75,20 +73,14 @@ public:
      * 绑定LottieHandler
      */
     void SetHandler(std::shared_ptr<LottieHandler> LottieHandler);
-    
-    //TODO:lipei-----------------
+
     void OnSurfaceCreated(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight);
     void OnSurfaceChanged(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight);
-    
+
     void destroy(uint64_t surfaceWidth, uint64_t surfaceHeight);
    
 private:
-    //TODO：不能直接用 OH_NativeXComponent，需要用自定义 XComponent。
-    //static void OnSurfaceCreated(OH_NativeXComponent *component, void *window);
-    //static void OnDispatchTouchEvent(OH_NativeXComponent *component, void *window);
-    //static void OnSurfaceChanged(OH_NativeXComponent *component, void *window);
-    //static void OnSurfaceDestroyed(OH_NativeXComponent *component, void *window);
-    
+
     /**
      * 渲染首帧和重置lottie宽高刷新渲染:
      * OnSurfaceCreated回调时渲染首帧
@@ -98,16 +90,9 @@ private:
      * @param isOnSurfaceCreated 用于区分OnSurfaceCreated和OnSurfaceChanged的回调
      * @return void
      */
-    //TODO：不能直接用 OH_NativeXComponent，需要用自定义 XComponent。
-    //static void RenderOnSurfaceChanged(OH_NativeXComponent *component, void *window, bool isOnSurfaceCreated);
+    //不能直接用 OH_NativeXComponent，需要用自定义 XComponent。
     static void RenderOnSurfaceChanged(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight, bool isOnSurfaceCreated);
-    
-    //TODO：不能直接用 OH_NativeXComponent，需要用自定义 XComponent。
-    //OH_NativeXComponent *nativeXComponent_{nullptr};
-    //ArkUI_NativeNodeAPI_1 *arkUINativeNodeApi_{nullptr};
-    //TODO:lipei----- handle__ 指向 Native 接口创建的组件实例的指针。
-    //ArkUI_NodeHandle handle_;
-    
+
     std::shared_ptr<LottieHandler> lottieHandler_{nullptr};
     std::shared_ptr<LottieRender> lottieRender_{nullptr};
     std::string contentMode_;

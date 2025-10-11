@@ -5,11 +5,7 @@
 #ifndef LOTTIETURBO_LOTTIELISTENER_H
 #define LOTTIETURBO_LOTTIELISTENER_H
 
-//TODO:lipei-----------------------------------------------
-//#include "common/napi_helper.h"
-//#include "napi/native_api.h"
 #include <functional>
-
 #include <unordered_map>
 
 #include "cangjie/lottie_utils.h"
@@ -33,8 +29,6 @@ enum class LottieEventType {
 
 class LottieListener {
 public:
-    //TODO:lipei-----------------------------------------------
-    //explicit LottieListener(napi_env env);
     explicit LottieListener();
     ~LottieListener();
 
@@ -42,8 +36,6 @@ public:
      * @brief 注册LottieListener对象所有存在的事件回调
      * @param listenerJsObject JS侧的LottieListener对象
      */
-    //TODO:lipei-----------------------------------------------
-    //void InitListenerCallback(napi_value listenerJsObject);
     void InitListenerCallback(LottieListenerConfig listenerCJObject);
 
     /**
@@ -51,8 +43,6 @@ public:
      * @param callbackFunc 回调函数
      * @param eventType 需要注册回调的事件类型
      */
-    //TODO:lipei-----------------------------------------------
-    //void RegisterCallback(napi_value callbackFunc, LottieEventType eventType);
     void RegisterCallback(std::function<void()> callbackFunc, LottieEventType eventType);
 
     /**
@@ -73,23 +63,9 @@ private:
      * @param listenerJsObject JS侧的LottieListener对象
      * @param eventType 需要注册回调的事件类型
      */
-    //TODO:lipei-----------------------------------------------
-    //void RegisterSelfCallback(napi_value listenerJsObject, LottieEventType eventType);
     void RegisterSelfCallback(LottieListenerConfig listenerCJObject, LottieEventType eventType);
 
-    /**
-     * @brief 删除回调引用
-     * @param callbackRef napi_ref
-     */
-    //TODO:lipei-----------------------------------------------
-    //void DeleteCallbackReference(napi_ref &callbackRef);
-
-    //TODO:lipei-----------------------------------------------
-    //NapiHelper napiHelper_;
-    //napi_ref jsThisRef_;
     std::unordered_map<LottieEventType, std::function<void()>> funcMap_; // 事件与回调函数的映射
-    //TODO:lipei-----------------------------------------------
-    //std::unordered_map<LottieEventType, napi_ref> callbackRefs_;         // 事件与回调引用的映射
 };
 
 } // namespace LottieTurbo

@@ -162,7 +162,6 @@ const double &LottieConfig::GetbgColor() const
     return bgColor_;
 }
 
-//TODO:lipei---------------------------------------------
 const int64_t &LottieConfig::GetAnimator() const
 {
     return animator;

@@ -9,7 +9,6 @@
 #include "common/common.h"
 #include "controller/lottie_handler.h"
 #include "dataManager/lottie_config_data.h"
-//#include "napi/native_api.h"
 #include <arkui/native_node_napi.h>
 #include <string>
 
@@ -33,7 +32,6 @@ class LottieControllerBridge {
 public:
     LottieControllerBridge() = default;
 
-    //static napi_value HandleLottieBaseAction(napi_env env, napi_callback_info info, LottieBaseAction action);
     void HandleLottieBaseAction(LottieBaseAction action);
 
     void SetId(char *lottieId);
@@ -54,9 +52,9 @@ public:
     CJFloat64Struct GetTimeCompleted();
     CJInt64Struct GetSegmentPos();
     CJBoolStruct GetIsSubframeEnabled();
-    //static napi_value SetPlaySpeed(napi_env env, napi_callback_info info);
+
     CJFloat64Struct GetPlaySpeed();
-    //static napi_value SetPlayDirection(napi_env env, napi_callback_info info);
+
     CJInt64Struct GetPlayDirection();
     CJAnimationSegmentArray GetSegments();
 
@@ -82,8 +80,6 @@ public:
     void ReLoad(LottieDataConfig config);
     void SetContentMode(char *contentMode);
     void SetFrameRate(double frameRate);
-    //static napi_value Construct(napi_env env, napi_callback_info info);
-    //static napi_value Exports(napi_env env, napi_value &exports);
 
 private:
     std::mutex locker;

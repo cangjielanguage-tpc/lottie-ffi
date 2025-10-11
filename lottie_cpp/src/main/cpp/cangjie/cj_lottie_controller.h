@@ -17,7 +17,6 @@ namespace LottieTurbo {
 
 class CJLottieController {
 public:
-    //explicit CJLottieController(std::shared_ptr<LottieControllerBridge> &lottieControllerBridge) : lottieControllerBridge(lottieControllerBridge) {}
     explicit CJLottieController(std::shared_ptr<LottieControllerBridge> lottieControllerBridge) : lottieControllerBridge(lottieControllerBridge) {}
 
     ~CJLottieController(){};
@@ -50,7 +49,6 @@ private:
     
     OHNativeWindow *window = nullptr;
 
-    //std::string xcomponentId;
     std::string lottieId_;
     uint64_t surfaceWidth;
     uint64_t surfaceHeight;
@@ -59,8 +57,6 @@ private:
 };
 
 extern "C" { // cangjie [LottieController] ffi
-
-//CJBytesArray cj_PAGViewController_uniqueID();
 
 int64_t cj_LottieController_init();
 void cj_LottieController_onSurfaceCreated(const int64_t jView, const int64_t surfaceId, uint64_t surfaceWidth, uint64_t surfaceHeight);
@@ -91,8 +87,6 @@ CJBoolStruct cj_LottieController_get_isSubframeEnabled(const int64_t ptr);
 CJAnimationSegmentArray cj_LottieController_get_segments(const int64_t ptr);
 
 
-//int64_t cj_LottieController_init();
-
 void cj_LottieController_play(const int64_t ptr);
 void cj_LottieController_stop(const int64_t ptr);
 void cj_LottieController_togglePause(const int64_t ptr);
@@ -112,8 +106,6 @@ void cj_LottieController_triggerEvent(const int64_t ptr, char *name);
 void cj_LottieController_addEventListener(const int64_t ptr, char *name, CallbackFunc callback);
 void cj_LottieController_removeEventListener(const int64_t ptr, char *name, CallbackFunc callback, bool hasCallbackFunc);
 
-//void cj_LottieController_changeColor(const int64_t ptr, char *layer, double startColor[], const int64_t startColorLen, 
-//                                     double endColor[], const int64_t endColorLen);
 void cj_LottieController_changeColor(const int64_t ptr, char *layer, double *startColor, const int64_t startColorLen, 
                                      double *endColor, const int64_t endColorLen);
 void cj_LottieController_setContentMode(const int64_t ptr, char *contentMode);

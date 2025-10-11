@@ -67,34 +67,28 @@ void cj_LottieView_createNativeRoot(char *lottieId, LottieDataConfig lottieDataC
 {
 
     auto xcomponentId = lottieId;
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【CreateNativeRoot】----------1--xcomponentId: %{public}s", xcomponentId);
     bool repeat = LottieManager::GetInstance().RepeatLottieId(xcomponentId);
     if (repeat) {
         return;
     }
-    //napi_ref *contentRef = new napi_ref;
-    //napi_create_reference(env, args[NUM_0], 1, contentRef);
+
     auto config = std::make_shared<LottieConfigBridge>(lottieDataConfig);
     auto node = std::make_shared<LottieXcomponentNode>(xcomponentId, config->GetRadius());
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【CreateNativeRoot】----------1-0--node.use_count: %{public}lld", node.use_count());
-    
+
     //TODO:将 LottieXcomponentNode 实例存入到 CJLottieController 中，便于后续 onSurfaceCreated 触发，调用到 LottieXcomponentNode。
     intptr_t ptrInt = static_cast<intptr_t>(lottieDataConfig.controller);
     CJLottieController *controller = reinterpret_cast<CJLottieController *>(ptrInt);
     if (!controller) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieView_createNativeRoot", "--------The CJLottieController is null.");
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cj_LottieView_createNativeRoot", "The CJLottieController is null.");
         return;
     }
     controller->setLottieXcomponentNode(node);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【CreateNativeRoot】----------1-0-1--node: %{public}p", &node);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【CreateNativeRoot】----------1-0-2--node.use_count: %{public}lld", node.use_count());
 
     auto handler = std::make_shared<LottieHandler>(xcomponentId, config);
     handler->lottieListener_ = std::move(config->GetLottieListener());
-    //TODO:lipei------------------[2250904]----------------------------------
+
     handler->safeFunc_ = std::move(config->GetSafeFunction());
     
-    //bool ret = LottieManager::GetInstance().AddLottieNode(xcomponentId, contentHandle, node, handler);
     bool ret = LottieManager::GetInstance().AddLottieNode(xcomponentId, node, handler);
     if (ret == false) {
         return;
@@ -102,15 +96,10 @@ void cj_LottieView_createNativeRoot(char *lottieId, LottieDataConfig lottieDataC
     auto task = [](std::shared_ptr<LottieHandler> handler, std::shared_ptr<LottieXcomponentNode> node) {
         if (handler && node) {
             node->SetHandler(handler);
-            //TODO:lipei--------直接在 cj 侧创建 @ohos.animator，不要调用 node->SetAnimator 在 c 侧创建新的 Animator。
             node->SetAnimator();
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【CreateNativeRoot】----------1-1");
-            //HITRACE("Lottie::InitHandleData", handler->InitHandleData());
+
             handler->InitHandleData();
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【CreateNativeRoot】----------1-2");
-            //HITRACE("Lottie::NodeInit", node->Init());
             node->Init();
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【CreateNativeRoot】----------1-3");
         }
     };
     TaskPool::GetInstance().PushTask(ffrt_queue_priority_high, task, handler, node);
@@ -157,27 +146,17 @@ void cj_LottieView_createNativeRoot(char *lottieId, LottieDataConfig lottieDataC
     auto trigger = new LottieTurbo::LottieHandler::TriggerData;
     trigger->func = std::bind(func, id);
     auto handler = LottieTurbo::LottieManager::GetInstance().GetHandleById(id);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl--", "LottieBasicAction: Lottie---HandleDisposeLottieNode----%{public}f", "666");
-//    napi_call_threadsafe_function(handler->safeFunc_, trigger, napi_tsfn_blocking);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl--", "LottieBasicAction: Lottie---HandleDisposeLottieNode 01---%{public}f", "666");
 }
 
  void lottieDestroy(const char* lottieIds)
 {
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl--", "LottieBasicAction: Lottie-------0----%{public}f", lottieIds);
     if (strcmp(lottieIds, "") == 0) {
-//    if (helper.CheckIsType(args[NUM_0], napi_undefined)) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl--", "LottieBasicAction: Lottie-------1----%{public}f", lottieIds);
         auto handleList = LottieTurbo::LottieManager::GetInstance().GetLottieHandlerList();
         for (auto &lottieHandler : handleList) {
             lottieHandler->isDestroy_ = true;
             TaskPoolLocal::GetInstance().PushTask(HandleDisposeLottieNode, lottieHandler->GetLottieId());
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl--", "LottieBasicAction: Lottie-------11----%{public}f", lottieIds);
         }
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl--", "LottieBasicAction: Lottie-------111----%{public}f", lottieIds);
     } else {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl--", "LottieBasicAction: Lottie-------2----%{public}f", lottieIds);
-//        std::string lottieId = helper.GetString(args[NUM_0]);
         std::string lottieId = lottieIds;
         auto handler = LottieTurbo::LottieManager::GetInstance().GetHandleById(lottieId);
         if (handler == nullptr) {
@@ -186,9 +165,7 @@ void cj_LottieView_createNativeRoot(char *lottieId, LottieDataConfig lottieDataC
         handler->isDestroy_ = true;
         TaskPoolLocal::GetInstance().PushTask(HandleDisposeLottieNode, lottieId);
     }
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "cwl--", "LottieBasicAction: Lottie-------3----%{public}f", lottieIds);
     return;
-//    return nullptr;
 }
 
  void lottieSetFrameRate(double frameRate)
@@ -335,14 +312,13 @@ typedef struct {
 // Resource c侧无法处理
 ArrayBuffer  renderToImage(const char* lottie,double frameNum,double width,double height) {
     std::string lottieId = lottie;
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "RenderToImage", "【RenderToImage】----------1-0---RenderToImage: %{public}s", lottieId.c_str());
     std::shared_ptr<DataManager> dataManager = std::make_shared<DataManager>();
     dataManager->InitFromJson(lottieId);
     if (dataManager->player == nullptr) {
         dataManager->InitFromFile(lottieId);
     }
     ArrayBuffer result = {NULL, 0};
-//    DRAWING_LOGE("Lottie::RenderToImage, ------------00-----------------");
+
     if (dataManager->player == nullptr) {
         DRAWING_LOGE("Lottie::RenderToImage, dataManager->player Null.");
         return result;
@@ -353,15 +329,12 @@ ArrayBuffer  renderToImage(const char* lottie,double frameNum,double width,doubl
     }
     std::shared_ptr<LottieRender> lottieRender = std::make_shared<LottieRender>();
     void *bitmap = malloc(width * height * RGBANUM);
-    DRAWING_LOGE("Lottie::RenderToImage, ------------05-----------------");
+
     if (lottieRender->RenderToImage(renderTree, width, height, bitmap)) {
-        DRAWING_LOGE("Lottie::RenderToImage, ------------06-----------------");
         DRAWING_LOGD("Lottie::RenderToImage000, RenderTree width:%{public}f,height:%{public}f", width, height);
         uint32_t* intPtr = reinterpret_cast<uint32_t*>(bitmap);
-            DRAWING_LOGE("Lottie::RenderToImage, ------------07-----------------");
         result.data = intPtr;
         result.size = width * height;
-        DRAWING_LOGE("Lottie::RenderToImage, ------------08-----------------");
         return result;
     }
     return result;

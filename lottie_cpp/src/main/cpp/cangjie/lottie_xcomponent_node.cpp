@@ -27,83 +27,35 @@ LottieXcomponentNode::LottieXcomponentNode(std::string xcomponentId, float radiu
 LottieXcomponentNode::~LottieXcomponentNode()
 {
     status_ = 1;
-    //arkUINativeNodeApi_->disposeNode(handle_);
 }
 
 void LottieXcomponentNode::CreateXcomponentNode(std::string xcomponentId, float radius)
 {
-    //OH_ArkUI_GetModuleInterface(ARKUI_NATIVE_NODE, ArkUI_NativeNodeAPI_1, arkUINativeNodeApi_);
-    //if (!arkUINativeNodeApi_) {
-    //    //DRAWING_LOGE("LottieXcomponentNode::CreateXcomponentNode lottieId(%{public}s): Error arkUINativeNodeApi_ NULL",
-    //    //             !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
-    //    return;
-    //}
-    //handle_ = arkUINativeNodeApi_->createNode(ARKUI_NODE_XCOMPONENT);
-    //if (!handle_) {
-    //    DRAWING_LOGE("LottieXcomponentNode::CreateXcomponentNode lottieId(%{public}s): Error handle_ NULL",
-    //                 !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
-    //    return;
-    //}
     if (xcomponentId.length() <= 0) {
-        //DRAWING_LOGE("LottieXcomponentNode::CreateXcomponentNode lottieId(%{public}s): Error xcomponentId NULL",
-        //             !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
+        DRAWING_LOGE("LottieXcomponentNode::CreateXcomponentNode lottieId(%{public}s): Error xcomponentId NULL",
+                     !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
         return;
     }
-    //ArkUI_AttributeItem item = {nullptr, NUM_1, xcomponentId.c_str()};
-    //arkUINativeNodeApi_->setAttribute(handle_, NODE_XCOMPONENT_ID, &item);
-    //ArkUI_NumberValue backgroundColorValue[] = {{.u32 = 0x00000000}};
-    //ArkUI_AttributeItem backgroundColorItem = {backgroundColorValue,
-    //                                           sizeof(backgroundColorValue) / sizeof(ArkUI_NumberValue)};
-    //arkUINativeNodeApi_->setAttribute(handle_, NODE_BACKGROUND_COLOR, &backgroundColorItem);
-    //if (radius > 0) {
-    //    DRAWING_LOGE("lal lottieId(%{public}f)", radius);
-    //    ArkUI_NumberValue radiusValue[] = {{.f32 = radius}};
-    //    ArkUI_AttributeItem radiusItem = {radiusValue, sizeof(radiusValue) / sizeof(ArkUI_NumberValue)};
-    //    arkUINativeNodeApi_->setAttribute(handle_, NODE_BORDER_RADIUS, &radiusItem);
-    //}
-    //OH_NativeXComponent_Callback *callback = new OH_NativeXComponent_Callback;
-    //callback->OnSurfaceCreated = OnSurfaceCreated;
-    //callback->OnSurfaceChanged = OnSurfaceChanged;
-    //callback->DispatchTouchEvent = OnDispatchTouchEvent;
-    //callback->OnSurfaceDestroyed = OnSurfaceDestroyed;
-    //PushCallback(xcomponentId, callback);
-    //nativeXComponent_ = OH_NativeXComponent_GetNativeXComponent(handle_);
-    //if (!nativeXComponent_) {
-    //    DRAWING_LOGE("LottieXcomponentNode::CreateXcomponentNode lottieId(%{public}s): Error GetNativeXComponent "
-    //                 "nativeXComponent_ NULL",
-    //                 !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
-    //    return;
-    //}
-    //OH_NativeXComponent_RegisterCallback(nativeXComponent_, callback);
+
     LottieManagerMap::getInstance().Add(xcomponentId);
     lottieRender_ = std::make_shared<LottieRender>();
 }
 
-//TODO:lipei--------------暂未实现-------------------------
 void LottieXcomponentNode::SetAnimator()
 {
-    //if (!handle_ || !lottieHandler_) {
     if (!lottieHandler_) {
         DRAWING_LOGE("LottieXcomponentNode::SetAnimator lottieId(%{public}s): Error Init params NULL",
                      !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
         return;
     }
-    //ArkUI_ContextHandle contextHandle = OH_ArkUI_GetContextByNode(handle_); //获取指向节点所在页面的UIContext指针。
-    //if (!contextHandle) {
-    //    DRAWING_LOGE("LottieXcomponentNode::SetAnimator lottieId(%{public}s): Error contextHandle NULL",
-    //                 lottieHandler_->GetLottieId().c_str());
-    //    return;
-    //}
-    //lottieHandler_->SetAnimator(contextHandle);
     lottieHandler_->SetAnimator();
 }
 
 void LottieXcomponentNode::SetHandler(std::shared_ptr<LottieHandler> lottieHandler)
 {
-    //if (!handle_ || !lottieHandler) {
     if (!lottieHandler) {
-        //DRAWING_LOGE("LottieXcomponentNode::SetHandle lottieId(%{public}s): Error Init params NULL",
-        //             !lottieHandler ? "" : lottieHandler->GetLottieId().c_str());
+        DRAWING_LOGE("LottieXcomponentNode::SetHandle lottieId(%{public}s): Error Init params NULL",
+                     !lottieHandler ? "" : lottieHandler->GetLottieId().c_str());
         return;
     }
     lottieHandler_ = lottieHandler;
@@ -114,29 +66,26 @@ void LottieXcomponentNode::Init()
     status_ = 0;
     int32_t width = 0;
     int32_t height = 0;
-    //if (!handle_ || !lottieHandler_) {
     if (!lottieHandler_) {
-        //DRAWING_LOGE("LottieXcomponentNode::Init lottieId(%{public}s): Error Init params NULL",
-        //             !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
+        DRAWING_LOGE("LottieXcomponentNode::Init lottieId(%{public}s): Error Init params NULL",
+                     !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
         return;
     }
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::Init】----------2");
+
     lottieHandler_->SetRenderCallBack([this]() { this->RenderCurrentFrame(); });
     lottieHandler_->SetAnimatorCallBack([this]() { this->RenderAndAdvanceFrame(); });
     lottieHandler_->SetContentModeUpdateCallback([this]() { this->OnUpdateContentMode(); });
     LottieManagerMap::getInstance().SetHandleById(lottieHandler_->GetLottieId(), lottieHandler_);
     LottieManagerMap::getInstance().GetRectById(lottieHandler_->GetLottieId(), width, height);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::Init】----------2-0");
+
     if (width != 0 && height != 0) {
         lottieHandler_->SetLottieSize(width, height);
         if (lottieHandler_->updateContentMode) {
             lottieHandler_->updateContentMode();
         }
         if (lottieHandler_->GetLottieConfig()->GetAutoplay()) {
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::Init】----------2-1");
             lottieHandler_->Play();
         } else if (lottieHandler_->renderAndAdvanceFrame) {
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::Init】----------2-2");
             lottieHandler_->renderAndAdvanceFrame();
         }
     }
@@ -145,17 +94,16 @@ void LottieXcomponentNode::Init()
 void LottieXcomponentNode::RenderCurrentFrame()
 {
     if (!lottieHandler_ || !lottieHandler_->dataManager_ || !lottieHandler_->lottieListener_) {
-        //DRAWING_LOGE("LottieXcomponentNode::RenderCurrentFrame lottieId(%{public}s): Error OnDraw params NULL",
-        //             !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
+        DRAWING_LOGE("LottieXcomponentNode::RenderCurrentFrame lottieId(%{public}s): Error OnDraw params NULL",
+                     !lottieHandler_ ? "" : lottieHandler_->GetLottieId().c_str());
         return;
     }
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderCurrentFrame】----------【cc】");
     float absoluteFrameToPlay = static_cast<float>(lottieHandler_->GetAbsoluteFrameToPlay());
     if (!lottieHandler_->GetIsSubframeEnabled()) {
         absoluteFrameToPlay = std::round(absoluteFrameToPlay);
     }
     uint32_t lottieFileTotalFrame = static_cast<uint32_t>(lottieHandler_->GetLottieFileTotalFrames());
-    //DRAWING_LOGD("OnDraw, absoluteFrameToPlay: %{public}f, lottieFileTotalFrame: %{public}d", absoluteFrameToPlay, lottieFileTotalFrame);
+    DRAWING_LOGD("OnDraw, absoluteFrameToPlay: %{public}f, lottieFileTotalFrame: %{public}d", absoluteFrameToPlay, lottieFileTotalFrame);
     int64_t current = lottieHandler_->currentIndex_++;
     // 绝对帧大于动画文件总帧数时不绘制
     if (absoluteFrameToPlay < lottieFileTotalFrame) {
@@ -191,20 +139,10 @@ void LottieXcomponentNode::ScheduleRenderTask(float absoluteFrameToPlay, int64_t
             handler->GetPlayState() == LottieHandler::PlayState::PAUSE) {
             handler->SetPlayState(LottieHandler::PlayState::END);
         }
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::ScheduleRenderTask】----------【dd】");
-        //HITRACE(
-        //    "Lottie::Render", auto lotLayerNode = handler->dataManager_->player->renderTree(
-        //                        ab, position.width, position.height, position.keepAspectRatio);
-        //    ////OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::ScheduleRenderTask】----------【dd】-1");    
-        //    render->RenderTree(handler->GetLottieId(), lotLayerNode, (LottieTurbo::CalculatePosition *)&position);
-        //);
-        //HITRACE(
-            //"Lottie::Render", 
+
         auto lotLayerNode = handler->dataManager_->player->renderTree(
                                 ab, position.width, position.height, position.keepAspectRatio);
-            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::ScheduleRenderTask】----------【dd】-1");    
-            render->RenderTree(handler->GetLottieId(), lotLayerNode, (LottieTurbo::CalculatePosition *)&position);
-        //);
+        render->RenderTree(handler->GetLottieId(), lotLayerNode, (LottieTurbo::CalculatePosition *)&position);
 
         auto func = [](LottieListener *listener, LottieEventType type) {
             if (listener) {
@@ -213,7 +151,6 @@ void LottieXcomponentNode::ScheduleRenderTask(float absoluteFrameToPlay, int64_t
         };
         auto trigger = new LottieHandler::TriggerData;
         trigger->func = std::bind(func, handler->lottieListener_.get(), LottieEventType::ON_DRAW_FRAME);
-        //napi_call_threadsafe_function(handler->safeFunc_, trigger, napi_tsfn_blocking);
     };
     TaskPoolLocal::GetInstance().PushTask(func, lottieHandler_, position_, lottieRender_, absoluteFrameToPlay, current);
 }
@@ -231,7 +168,6 @@ void LottieXcomponentNode::RenderAndAdvanceFrame()
     if (status_) {
         return;
     }
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderAndAdvanceFrame】----------【bb】");
     if (lottieHandler_->lottieListener_) {
         auto func = [](LottieListener *listener, LottieEventType type) {
             if (listener) {
@@ -239,23 +175,13 @@ void LottieXcomponentNode::RenderAndAdvanceFrame()
             }
         };
         auto trigger = new LottieHandler::TriggerData;
-        //trigger->func = std::bind(func, lottieHandler_->lottieListener_.get(), LottieEventType::ON_ENTER_FRAME);
-        //napi_call_threadsafe_function(lottieHandler_->safeFunc_, trigger, napi_tsfn_blocking);
     }
-    
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderAndAdvanceFrame】----------【bb】-lottieHandler_ != NULL: %{public}d", lottieHandler_ != NULL);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderAndAdvanceFrame】----------【bb】-lottieHandler_->animator_ != NULL: %{public}d", lottieHandler_->animator_ != NULL);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderAndAdvanceFrame】----------【bb】-status_ == PLAY: %{public}d", lottieHandler_->animator_->GetStatus() == LottieTurbo::Animator::AnimatorStatus::PLAY);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderAndAdvanceFrame】----------【bb】-status_ == INIT: %{public}d", lottieHandler_->animator_->GetStatus() == LottieTurbo::Animator::AnimatorStatus::INIT);
-    
+
     if (lottieHandler_ && lottieHandler_->animator_ &&
         (lottieHandler_->animator_->GetStatus() == LottieTurbo::Animator::AnimatorStatus::PLAY ||
          lottieHandler_->animator_->GetStatus() == LottieTurbo::Animator::AnimatorStatus::INIT)) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderAndAdvanceFrame】----------【bb】-1");
         this->RenderCurrentFrame();
         lottieHandler_->AdvanceFrame();
-    } else {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderAndAdvanceFrame】----------【bb】-2");
     }
 }
 
@@ -321,7 +247,6 @@ void LottieXcomponentNode::RenderOnSurfaceChanged(void *window, std::string lott
 {
 
     const char* idStr = lottieId.c_str();
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderOnSurfaceChanged】----------[定位]--3--idStr = %{public}s", idStr);
     if (!idStr) {
         DRAWING_LOGE("LottieXcomponentNode::RenderOnSurfaceChanged: Error GetXComponentId Failed");
         return;
@@ -329,19 +254,15 @@ void LottieXcomponentNode::RenderOnSurfaceChanged(void *window, std::string lott
 
     uint64_t width = surfaceWidth;
     uint64_t height = surfaceHeight;
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderOnSurfaceChanged】----------[定位]--3-1--width = %{public}d", width);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderOnSurfaceChanged】----------[定位]--3-2--iheight = %{public}d", height);
     if (width <= 0 || height <= 0) {
         DRAWING_LOGE("LottieXcomponentNode::RenderOnSurfaceChanged: Error GetXComponentSize Failed");
         return;
     }
     
-    //DRAWING_LOGD("RenderOnSurfaceChanged ret=%{public}d width=%{public}lu,"
-    //             "height=%{public}lu id=%{public}s",
-    //             ret, width, height, idStr);
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderOnSurfaceChanged】----------[定位]--3-3");
+    DRAWING_LOGD("RenderOnSurfaceChanged ret=%{public}d width=%{public}lu,"
+                 "height=%{public}lu id=%{public}s",
+                 ret, width, height, idStr);
     if (isOnSurfaceCreated) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::RenderOnSurfaceChanged】----------[定位]--3-4");
         LottieManagerMap::getInstance().SetWindowById(idStr, window);
     }
     
@@ -366,31 +287,20 @@ void LottieXcomponentNode::RenderOnSurfaceChanged(void *window, std::string lott
 
 void LottieXcomponentNode::OnSurfaceCreated(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight)
 {
-    //DRAWING_LOGD("OnSurfaceCreated");
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::OnSurfaceCreated】----------[定位]--1--LottieId:%{public}s", lottieId.c_str());
+    DRAWING_LOGD("OnSurfaceCreated");
     RenderOnSurfaceChanged(window, lottieId, surfaceWidth, surfaceHeight, true);
 }
 
 void LottieXcomponentNode::OnSurfaceChanged(void *window, std::string lottieId, uint64_t surfaceWidth, uint64_t surfaceHeight)
 {
-    //DRAWING_LOGD("OnSurfaceChanged");
-    OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "LottieTur播放动画", "【LottieXcomponentNode::OnSurfaceChanged】----------[定位]--2");
+    DRAWING_LOGD("OnSurfaceChanged");
     RenderOnSurfaceChanged(window, lottieId, surfaceWidth, surfaceHeight, false);
 }
-
-//TODO:lipei--------------暂未实现-------------------------
-//void LottieXcomponentNode::OnDispatchTouchEvent(OH_NativeXComponent *component, void *window)
-//{
-//    DRAWING_LOGD("OnDispatchTouchEvent");
-//}
-
-//TODO:lipei--------------暂未实现-------------------------
-//void LottieXcomponentNode::OnSurfaceDestroyed(OH_NativeXComponent *component, void *window)
-
 
 void LottieXcomponentNode::destroy(uint64_t surfaceWidth, uint64_t surfaceHeight)
 {
     lottieRender_->destroy(lottieHandler_->GetLottieId(), (LottieTurbo::CalculatePosition *)&position_);
 }
+
 
 }
