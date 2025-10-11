@@ -140,12 +140,14 @@ void cj_LottieView_createNativeRoot(char *lottieId, LottieDataConfig lottieDataC
 //
  void HandleDisposeLottieNode(std::string id)
 {
-    auto func = [](std::string id) {
-        LottieTurbo::LottieManager::GetInstance().DisposeLottieNode(id);
-    };
-    auto trigger = new LottieTurbo::LottieHandler::TriggerData;
-    trigger->func = std::bind(func, id);
-    auto handler = LottieTurbo::LottieManager::GetInstance().GetHandleById(id);
+    auto handler = LottieManager::GetInstance().GetHandleById(id);
+    if (handler == nullptr) {
+        return;
+    }
+    auto func = [](std::string id) { LottieManager::GetInstance().DisposeLottieNode(id); };
+    auto trigger = new LottieHandler::TriggerData;
+    trigger->func = std::bind(func, id);;
+    handler->safeFunc_(trigger);
 }
 
  void lottieDestroy(const char* lottieIds)
