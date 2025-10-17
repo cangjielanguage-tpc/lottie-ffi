@@ -1,26 +1,44 @@
-# lottie-turbo 特性文档
+# lottie-ffi 特性文档
 
 ## 介绍
 
-lottie-turbo 是一个动画库，它可以解析Adobe After Effects软件通过Bodymovin插件导出的json格式的动画，并在移动设备上进行本地渲染。
+lottie-ffi 是一个动画库，它可以解析Adobe After Effects软件通过Bodymovin插件导出的json格式的动画，并在移动设备上进行本地渲染。
 
 
 ## 1 LottieView 组件控制器
 
 ### 1.1 LottieView Interface API Description
 
-
 ```cangjie
 @Component
 public class LottieView {
 
-    /* 应用内的唯一id */
+    /* LottieView 配置项结构体 */
+    var config: AnimationConfig
+    /* 动画控制器 */
+    var controller: LottieController
+
+}
+```
+
+
+### 1.2 AnimationConfig struct
+
+```cangjie
+public struct AnimationConfig {
+
+    /* 应用内的唯一 id，不配置时将自动随机生成 */
     var lottieId: String
 
-    /* 应用内的动画数据文件路径, 仅限json格式  */
+    /**
+     * 应用内的动画数据文件路径, 仅限 json 格式
+     * path: 路径支持沙箱路径和网络资源
+     * @example path: path: "/data/storage/el1/bundle/entry/resources/xxx/xxxx.json"
+     * @example path: path: json 文件的 uri 下载链接
+     */
     var path: String
 
-    /* json格式的动画数据, 仅限json字符串格式，优先级高于path */
+    /* json 格式的动画数据, 仅限 json 字符串格式，优先级高于 path */
     var animationData: String
     
     /**
@@ -44,7 +62,7 @@ public class LottieView {
     /* 是否使用缓存，默认true，使用缓存 */
     var useCache: Bool
     
-    /* 当动画不可见时，是否跳过绘制：设为true则跳过绘制，默认为 true */
+    /* 当动画不可见时，是否跳过绘制：设为 true则跳过绘制，默认为 true */
     var autoSkip: Bool
 
     /* 控制动画操作，通过 LottieController()创建 */
@@ -57,6 +75,7 @@ public class LottieView {
     var setImageAssetDelegate: Array<(String, String)>
 }
 ```
+
 
 ## 2 LottieController 单个动画控制器
 
@@ -130,73 +149,73 @@ public class LottieController {
     /**
      * 动画播放
      */
-    public func play()
+    public func play(): Unit
     
     /**
      * 动画停止
      */
-    public func stop()
+    public func stop(): Unit
     
     /**
      * 动画暂停播放切换
      */
-    public func togglePause()
+    public func togglePause(): Unit
     
     /**
      * 动画销毁
      */
-    public func destroy()
+    public func destroy(): Unit
     
     /**
      * 动画暂停
      */
-    public func pause()
+    public func pause(): Unit
     
     /**
      * 控制动画画面停止在某一帧或某个时刻
      * 参数 value - Float64类型,帧号(值>=0)或时刻(ms)
      * 参数 isFrame - ?Bool类型,true按帧控制, false按时间控制, 缺省默认false
      */
-    public func goToAndStop(value: Float64, isFrame: ?Bool)
+    public func goToAndStop(value: Float64, isFrame: ?Bool): Unit
     
     /**
      * 控制动画画面从在某一帧或某个时刻开始播放
      * 参数 value - Float64类型, 帧号(>=0)或时刻(ms)
      * 参数 isFrame - ?Bool类型, true按帧控制, false按时间控制, 缺省默认false
      */
-    public func goToAndPlay(value: Float64, isFrame: ?Bool)
+    public func goToAndPlay(value: Float64, isFrame: ?Bool): Unit
     
     /**
      * 限定动画资源播放时的整体帧范围
      * 参数 start - Float64类型, 起始帧号
      * 参数 end - Float64类型, 结束帧号
      */
-    public func setSegment(start: Float64, end: Float64)
+    public func setSegment(start: Float64, end: Float64): Unit
     
     /**
      * 设置仅播放指定范围的帧动画
      * 参数 segments - Array<(Float32, Float32)>类型, 片段或片段数组 若传入的是数组, 且当前loop!=0, 播放结束后, 仅循环播放最后一个片段
      * 参数 forceFlag - ?Bool类型, 值为true立刻生效, 值为false循环下次播放的时候生效
      */
-    public func playSegments(segments: Array<(Float32, Float32)>, forceFlag: ?Bool)
+    public func playSegments(segments: Array<(Float32, Float32)>, forceFlag: ?Bool): Unit
     
     /**
      * 重置动画播放片段, 使动画重新从第一帧开始播放完整动画
      * 参数 forceFlag - Bool类型, 值为true立刻生效, 值为false循环下次播放的时候生效
      */
-    public func resetSegments(forceFlag: Bool)
+    public func resetSegments(forceFlag: Bool): Unit
     
     /**
      * 设置播放速度
      * 参数 speed - Float64类型, 值为浮点类型, speed>0正向播放, speed<0反向播放, speed=0暂停播放, speed=1.0/-1.0正常速度播放
      */
-    public func setSpeed(speed: Float64)
+    public func setSpeed(speed: Float64): Unit
     
     /**
      * 设置播放方向
      * 参数 direction - Int64类型, 1为正向, -1为反向
      */
-    public func setDirection(direction: Int64)
+    public func setDirection(direction: Int64): Unit
     
     /**
      * 设置尽可能的更新动画帧率
@@ -216,47 +235,47 @@ public class LottieController {
      * 强制触发指定事件
      * 参数 name - String类型, 事件名称 'enterFrame' | 'loopComplete' | 'complete' | 'segmentStart' | 'destroy' | 'config_ready' | 'data_ready' | 'DOMLoaded' | 'error' | 'data_failed' | 'loaded_images'
      */
-    public func triggerEvent(name: String)
+    public func triggerEvent(name: String): Unit
     
     /**
      * 添加监听事件
      * 参数 name - String类型, 事件名称
      * 参数 callback 事件回调函数
      */
-    public func addEventListener(name: String, callback: CFunc<() -> Unit>)
+    public func addEventListener(name: String, callback: CFunc<() -> Unit>): Unit
     
     /**
      * 移除监听事件
      * 参数 name - String类型, 事件名称
      * 参数 callback 移除后触发的事件回调函数
      */
-    public func removeEventListener(name: String, callback: Option<CFunc<() -> Unit>>)
+    public func removeEventListener(name: String, callback: CFunc<() -> Unit>): Unit
     
     /**
      * 改变动画某个图层的颜色，当前支持st和fl图层
      * 参数 layer - String类型, 图层名称
-     * 参数 startColor - Array<Float64>类型, 起始颜色，若endColor不传，则startColor为要修改的颜色，支持RGB和RGBA格式
+     * 参数 startColor - Array<Float64>类型, 起始颜色，若 endColor 为空数组，则startColor为要修改的颜色，支持RGB和RGBA格式
      * 参数 endColor - ?Array<Float64>类型, 结束颜色，支持RGB和RGBA格式
      */
-    public func changeColor(layer: String, startColor: Array<Float64>, endColor: ?Array<Float64>)
+    public func changeColor(layer: String, startColor: Array<Float64>, endColor: Array<Float64>): Unit
     
     /**
      * 设置布局模式
      * @param contentMode - String类型, 布局模式，Fill,Cover,Top,Bottom,Contain，默认为 Contain
      */
-    public func setContentMode(contentMode: String)
+    public func setContentMode(contentMode: String): Unit
     
     /**
      * 设置动画帧率
      * 参数 frameRate - Float64类型, 动画帧率，范围1~120
      */
-    public func setFrameRate(frameRate: Float64)
+    public func setFrameRate(frameRate: Float64): Unit
     
     /**
      * 设置动画重载
      * 参数 config - AnimationConfig类型, 动画配置
      */
-    public func reload(config: AnimationConfig)
+    public func reload(config: AnimationConfig): Unit
     
 }
 ```
@@ -273,92 +292,92 @@ public class LottieSource {
      * 播放动画
      * 参数 lottieId - String类型, 动画唯一id
      */
-    public func play(lottieId!: String = "")
+    public func play(lottieId!: String = ""): Unit
     
     /**
      * 暂停动画
      * 参数 lottieId - String类型, 动画唯一id
      */
-    public func pause(lottieId!: String = "")
+    public func pause(lottieId!: String = ""): Unit
     
     /**
      * 全局动画暂停与播放切换
      * 参数 lottieId - String类型, 动画唯一id
      */
-    public func togglePause(lottieId!: String = "")
+    public func togglePause(lottieId!: String = ""): Unit
     
     /**
      * 停止动画
      * 参数 lottieId - String类型, 动画唯一id
      */
-    public func stop(lottieId!: String = "")
+    public func stop(lottieId!: String = ""): Unit
     
     /**
      * 全局动画播放方向控制
      * 参数 speed - Float64类型, 全局动画播放方向控制，speed>0正向播放, speed<0反向播放, speed=0暂停播放, speed=1.0/-1.0正常速度播放
      * 参数 lottieId - String类型, 动画唯一id
      */
-    public func setSpeed(speed: Float64,lottieId!: String = "")
+    public func setSpeed(speed: Float64,lottieId!: String = ""): Unit
     
     /**
      * 全局设置播放方向
      * 参数 direction - Float64类型,1.0为正向, -1.0为反向
      * 参数 lottieId - String类型, 动画唯一id
      */
-    public func setDirection(direction: Float64,lottieId!: String = "")
+    public func setDirection(direction: Float64,lottieId!: String = ""): Unit
     
     /**
      * 销毁动画
      * 参数 lottieId - String类型, 动画唯一id
      */
-    public func destroy(lottieId!: String = "")
+    public func destroy(lottieId!: String = ""): Unit
     
     /**
      * 全局设置播放帧率
      * 参数 frameRate - Float64类型, 播放帧率
      */
-    public func setFrameRate(frameRate: Float64)
+    public func setFrameRate(frameRate: Float64): Unit
     
     /**
      * 全局文件缓存清除
      * 参数 lottieId - String类型, 动画唯一id
      */
-    public func clearFileCache(url!: String = "")
+    public func clearFileCache(url!: String = ""): Unit
     
     /**
      * 设置文件缓存容器大小
      * 参数 size - Int64类型, 缓存文件的个数
      * 参数 capacity - Int64类型, 缓存文件的总大小
      */
-    public func resizeFileCache(size: Int64, capacity: Int64)
+    public func resizeFileCache(size: Int64, capacity: Int64): Unit
     
     /**
      * 设置缓存容器大小
      * 参数 size - Int64类型, 缓存容器可以动画个数
      * 参数 capacity - Int64类型, 缓存容器的总内存大小
      */
-    public func resizeCache(size: Int64, capacity: Int64)
+    public func resizeCache(size: Int64, capacity: Int64): Unit
     
     /**
      * 清空缓存容器
      */
-    public func clearCache()
+    public func clearCache(): Unit
     
     /**
      * 通过path移除指定缓存
      * 参数 path - String类型, 动画唯一id
      */
-    public func removeCache(path: String)
+    public func removeCache(lottieId: String): Unit
 
     /**
-     * 将lottie动画的某帧离屏渲染为图像数据
-     * 参数 lottie - String类型, 动画唯一id
+     * 将 lottie 动画的某帧离屏渲染为图像数据
+     * 参数 lottie - String类型, 动画唯一 id
      * 参数 frameNum - Float64类型, 帧序号
      * 参数 width - Float64类型, 宽度
      * 参数 height - Float64类型, 高度
-     * @return CPointer<ArrayBuffer>类型
+     * @return Array<UInt8>类型
      */
-    public func renderToImage(lottie: String,frameNum: Float64, width: Float64, height: Float64): CPointer<ArrayBuffer>
+    public func renderToImage(lottie: String,frameNum: Float64, width: Float64, height: Float64): Array<UInt8>
     
 }
 ```

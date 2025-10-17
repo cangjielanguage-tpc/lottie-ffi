@@ -181,7 +181,7 @@ public class LottieController <: XComponentController {
         }
     }
 
-    public func setCurrentFrame(currentFrame: Float64): Unit{
+    public func setCurrentFrame(currentFrame: Float64): Unit {
         unsafe {
             cj_LottieController_set_currentFrame(this.ptr, currentFrame)
         }

@@ -51,8 +51,9 @@ public struct AnimationConfig {
 
     /**
      * 应用内的动画数据文件路径, 仅限 json 格式
-     * path 路径支持本地文件和网络资源
-     * @example path: path: "https://xxx.com/xxxx.json"
+     * path 路径支持沙箱路径和网络资源
+     * @example path: path: "/data/storage/el1/bundle/entry/resources/xxx/xxxx.json"
+     * @example path: path: json 文件的 uri 下载链接
      */
     public let path: String
 
@@ -94,10 +95,9 @@ public struct AnimationConfig {
     public var autoSkip: Bool
 
     /**
-     * 控制动画操作，通过 new LottieController()创建
+     * 控制动画操作，通过 LottieController()创建
      */
-    /* LottieController 对应的 c 端 CJLottieController 对象的指针值。*/
-    public var controller: Int64
+    var controller: LottieController
 
     /**
      * 监听事件，通过 new LottieListener()创建
@@ -141,7 +141,7 @@ public struct AnimationConfig {
         frameRate!: UInt8 = 30,
         useCache!: Bool = true,
         autoSkip!: Bool = true,
-        controller!: Int64 = 0,
+        controller!: LottieController = LottieController(),
         listener!: LottieListener = LottieListener(),
         density!: Float64 = 0.0,
         setImageAssetDelegate!: Array<(String, String)> = Array<(String, String)>(),
@@ -196,7 +196,7 @@ public struct AnimationConfig {
                 frameRate: this.frameRate,
                 listener: LottieListenerConfig(this.listener),
                 density: this.density,
-                controller: this.controller,
+                controller: this.controller.getPtr(),
                 setImageAssetDelegate: handleSegments.pointer,
                 setImageAssetDelegateSize: len,
                 useCache: this.useCache,
@@ -240,6 +240,3 @@ func createNativeRoot(lottieId: String, config: AnimationConfig): Unit {
  */
 //TODO:lipei-----------------------------------[未实现]-----------------------------------------------
 func lottieSetVisible(lottieId: String, visible: Bool): Unit {}
-
-
-

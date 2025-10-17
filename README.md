@@ -1,35 +1,37 @@
 <div align="center">
-<h1>lottie-turbo</h1>
+<h1>lottie-ffi</h1>
 </div>
 
 <p align="center">
-<img alt="" src="https://img.shields.io/badge/release-v1.0.0-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/release-v1.0.1-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjc-v1.0.0-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjcov-NA-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v1.0.1-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjcov-81.3%25-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
 
 ## 介绍
 
-lottie-turbo是一个动画库，它可以解析Adobe After Effects软件通过Bodymovin插件导出的json格式的动画，并在移动设备上进行本地渲染。
+lottie-ffi是一个动画库，它可以解析Adobe After Effects软件通过Bodymovin插件导出的json格式的动画，并在移动设备上进行本地渲染。
 
 ## 特性
 
-- 🚀 支持加载本地文件方式加载动画
+- 🚀 支持通过沙箱路径方式加载动画文件
 - 🚀 支持加载网络资源以URI路径方式加载动画
 - 🚀 支持动画播放、暂停、销毁等功能
 
 ### 源码目录
 
 ```shell
-/lottie-turbo                   # 项目根目录
+/lottie-ffi                  # 项目根目录
 ├── doc                      #文档目录
 │   ├── assets               #文档资源目录
-│   └── feature_api.md       #API接口文档
+│   └── feature_api.md       # API 接口文档
 ├── entry                    # 示例代码文件夹
-├── lottie                   # lottie库文件夹
-│    └─ src/main/cangjie/src # 核心代码，包含json解析，动画绘制，操作动画                  
+├── lottie                   # lottie 库文件夹
+│    └─ src/main/cangjie/src # 核心代码，包含 json 解析，动画绘制，操作动画      
+├── lottie_cpp               # lottie 库 c 代码文件夹
+│    └─ src/main/cpp/cangjie # 核心 c 代码，包含 json 解析，动画绘制，操作动画                
 ├── README.md                # 安装使用方法      
 ```
 ### 接口说明
@@ -39,7 +41,7 @@ lottie-turbo是一个动画库，它可以解析Adobe After Effects软件通过B
 ## 使用说明
 
 ### 编译构建
-1. 通过module引入
+#### 1. 通过module引入
     1. 克隆下载项目
     2. 将lottie模块拷贝到应用项目下
     3. 修改自身应用 entry 下的 oh-package.json5 文件，在 dependencies 字段添加 "lottie": "file:../lottie"
@@ -60,24 +62,25 @@ lottie-turbo是一个动画库，它可以解析Adobe After Effects软件通过B
        ```cangjie
        import lottie.*
        ```
-2.三方库方式引入
-    1. 目标工程把 lottie-turbo 依赖库作为 git submodule 引入
+
+#### 2. 三方库方式引入
+    1. 目标工程把 lottie-ffi 依赖库作为 git submodule 引入
     ```
     > cd $工程根目录
     > mkdir third-party
     > cd third-party
-    > git submodule add "https://gitcode.com/Cangjie-TPC/lottie-turbo.git"
+    > git submodule add "https://gitcode.com/Cangjie-TPC/lottie-ffi.git"
     ```
     2. 修改自身应用 entry/src/main/cangjie 下的 cjpm.toml 文件，添加依赖
     ```
       [dependencies]
-        lottie = {path = "../../../../third-party/lottie-turbo/lottie/src/main/cangjie", version = "1.0.0"}
+        lottie = {path = "../../../../third-party/lottie-ffi/lottie/src/main/cangjie", version = "1.0.0"}
     ```
         或
     ```
     [dependencies]
-      [dependencies.lottie-turbo]
-        path = "../../../../third-party/lottie-turbo/lottie/src/main/cangjie"
+      [dependencies.lottie-ffi]
+        path = "../../../../third-party/lottie-ffi/lottie/src/main/cangjie"
         version = "1.0.0"
     ```
 
@@ -85,6 +88,10 @@ lottie-turbo是一个动画库，它可以解析Adobe After Effects软件通过B
     ```cangjie
     import lottie.*
     ````
+
+> 路径资源在工程entry/src/main/resources/下创建新文件夹，例如 resfile。
+
+
 ### 功能示例
 
 ```cangjie
@@ -96,35 +103,60 @@ import lottie.*
 
 @Entry
 @Component
-class Index {
-    @State
+class EntryView {
+
     var controller: LottieController = LottieController()
-    public func build() {
-        Column {
-              LottieView(
-                lottieId: "lottie1", //动画id，需要保证唯一性
-                loop: true, //是否循环播放，非必须，默认为true
-                autoplay: true, //是否自动播放，非必须，默认为true
-                autoSkip: true, //不可见时是否自动跳过渲染，非必须，默认为true
-                path: "/data/storage/el1/bundle/entry/resources/resfile/grunt.json", //通过resfile文件播放
-                // path: "https://cdn.lottielab.com/l/7Zgk9iuQxmZ3tD.json", //通过uri播放
-                controller: this.controller //lottie动画控制器
-              ).height(50.percent).width(160)
-                .backgroundColor(Color.GRAY)
-                .onClick {
-                    =>
-                    this.controller.togglePause(); //控制动画播放暂停
+    @State var animationData: String = ""
+    var fileName: String = "grunt.json"
+
+    func build() {
+        Column(20) {
+
+            Column {
+                LottieView(config: AnimationConfig(
+                    lottieId: "lottie1",        //动画id，需要保证唯一性
+                    path: "/data/storage/el1/bundle/entry/resources/resfile/navidad.json",
+                    loop: 0,                    // 是否循环播放,默认 -1 循环。
+                    autoplay: false,            // 是否自动播放，默认 true
+                    contentMode: "Contain"      // 填充的模式
+                ), controller: controller)
+            }.width(50.percent).height(160).backgroundColor(Color.GRAY)
+
+            List() {
+                ListItem() {
+                    Column(5) {
+                        Row(5) {
+                            Button('togglePause')
+                                .width(50.percent)
+                                .height(35)
+                                .shape(ShapeType.Normal)
+                                .onClick {
+                                    =>
+                                    this.controller.togglePause()
+                                }
+                        }
+
+                    }.width(100.percent)
                 }
-        }.height(100.percent).width(100.percent)
+            }.width(100.percent).height(90.percent).scrollBar(BarState.Off)
+        }.width(100.percent).height(100.percent).padding(top: 20, left: 10, right: 10)
     }
+
 }
 ```
+
+### 注意事项
+
+- 1.当前默认在页面 aboutToDisappear时自动触发 destroy 进行销毁。
+- 2.需要注意 lottieId 的唯一性，不配置时将自动随机生成。
+- 3.path 支持沙箱路径、uri下载链接。
 
 ## 约束与限制
 
 在下述版本验证通过：
 
     IDE: DevEco Studio 5.1.1 Release(Build Version: 5.1.1.823)
+    Cangjie Compiler: 1.0.1 (cjnative)
 
 ## 开源协议
 
