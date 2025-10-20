@@ -15,7 +15,9 @@ import ohos.state_macro_manage.*
 @Component
 public class LottieView {
 
+    /* LottieView 配置项结构体 */
     var config: AnimationConfig
+    /* 单个动画控制实例 */
     var controller: LottieController
 
     func build() {
@@ -30,8 +32,7 @@ public class LottieView {
         if (this.config.runOnce) {
             return
         }
-        //TODO:lipei---------------[暂未处理]------------------
-        //this.config.runOnce = true
+        this.config.runOnce = true
         var lottieId: String = this.config.lottieId
         if (lottieId == "") {
             /*
@@ -56,7 +57,7 @@ public class LottieView {
             frameRate: this.config.frameRate,
             useCache: this.config.useCache,
             autoSkip: this.config.autoSkip,
-            controller: this.controller.getPtr(),
+            controller: this.controller,
             listener: this.config.listener,
             density: Float64(displayInfo.densityDPI),
             setImageAssetDelegate: this.config.setImageAssetDelegate,

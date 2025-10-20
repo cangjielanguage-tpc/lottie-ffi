@@ -49,7 +49,7 @@ class EntryView {
                                     this.controller.reload(AnimationConfig(
                                       loop: 2,
                                       autoplay: true,
-                                      path: "https://assets7.lottiefiles.com/packages/lf20_sF7uci.json"
+                                      path: "/data/storage/el1/bundle/entry/resources/resfile/animation.json"
                                     ))
                                 }
                         }

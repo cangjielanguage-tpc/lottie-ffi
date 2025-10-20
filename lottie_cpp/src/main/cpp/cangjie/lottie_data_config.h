@@ -24,7 +24,7 @@ struct LottieDataConfig {
     /**
      * 应用内的动画数据文件路径, 仅限json格式
      * path 路径支持本地文件和网络资源
-     * @example path: path: "https://xxx.com/xxxx.json"
+     * @example path: path: json 文件的 uri 下载链接
      */
     char *path;
 

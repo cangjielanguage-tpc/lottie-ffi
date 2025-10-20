@@ -40,7 +40,7 @@ public struct LottieDataConfig {
      * 应用内的动画数据文件路径, 仅限json格式
      * path 路径支持本地文件和网络资源
      * @example path: $rawfile('common/lottie/animation.json')
-     * @example path: path: "https://xxx.com/xxxx.json"
+     * @example path: path: json 文件的 uri 下载链接
      */
     //public let path?: String | Resource
     public let path: CString
@@ -68,14 +68,11 @@ public struct LottieDataConfig {
     /**
      * 初始化动画资源播放时的整体帧范围
      */
-    //public var initialSegment: Option<AnimationSegment> = None
-    //public var initialSegment: Option<(Float64, Float64)> = None
     public var initialSegment: VArray<Float64, $2>
 
     /**
      * 动画填充模式 支持填充模式：Fill, Top, Cover, Bottom, Contain  默认模式是：Contain
      */
-    //public let contentMode: ContentFIllMode = ContentFIllMode.Contain
     public var contentMode: CString //= "Contain"
 
     /**
@@ -91,26 +88,17 @@ public struct LottieDataConfig {
     /**
      * 控制动画操作
      */
-    //public var controller: Option<LottieController> = None
     /* LottieController 对应的 c 端 CJLottieController 对象的指针值。*/
     public var controller: Int64
 
     /**
      * 监听事件
      */
-    //public let listener: Option<LottieListener> = None
     public let listener: LottieListenerConfig
-
-    /**
-     * 文件读取ResManager
-     */
-    //public let resManager?: resmgr.ResourceManager
 
     /**
      * 设置待替换的图像资源(url/base64)
      */
-    //public let setImageAssetDelegate?: ImageAssetDelegate[]
-    //public let setImageAssetDelegate: CPointer<VArray<CString, $2>>
     public let setImageAssetDelegate: CPointer<ImageAssetDelegate>
     public let setImageAssetDelegateSize: Int64
 
@@ -140,7 +128,6 @@ public struct LottieDataConfig {
         contentMode!: CString,
         frameRate!: UInt8,
         listener!: LottieListenerConfig,
-        //resManager: this.resManager,
         density!: Float64,
         controller!: Int64,
         setImageAssetDelegate!: CPointer<ImageAssetDelegate>,
@@ -158,7 +145,6 @@ public struct LottieDataConfig {
         this.contentMode = contentMode
         this.frameRate = frameRate
         this.listener = listener
-        //this.resManager = resManager
         this.density = density
         this.controller = controller
         this.setImageAssetDelegate = setImageAssetDelegate

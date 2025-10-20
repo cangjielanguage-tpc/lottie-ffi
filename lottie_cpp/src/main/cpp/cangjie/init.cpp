@@ -253,7 +253,6 @@ void cj_LottieView_createNativeRoot(char *lottieId, LottieDataConfig lottieDataC
 {
     std::string path_url = path;
     if (path_url.size() == NUM_1) {
-//        std::string key = napiHelper.GetString(vec[NUM_0]);
         MemoryCache::GetInstance()->Remove(path_url);
     }
     return;
@@ -265,7 +264,6 @@ void cj_LottieView_createNativeRoot(char *lottieId, LottieDataConfig lottieDataC
     bool result = false;
     std::string key = path;
     if (key.size() == LottieTurbo::NUM_1) {
-//        std::string key = napiHelper.GetString(vec[NUM_0]);
         auto data = LottieTurbo::MemoryCache::GetInstance()->GetData(key);
         if (data == nullptr) {
             return result;
