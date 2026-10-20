@@ -6,8 +6,6 @@ internal import ohos.base.*
 internal import ohos.component.*
 internal import ohos.state_manage.*
 internal import ohos.resource_manager.*
-internal import ohos.router.*
-internal import ohos.prompt_action.PromptAction
 internal import ohos.hilog.Hilog
 internal import ohos.ability.*
 
